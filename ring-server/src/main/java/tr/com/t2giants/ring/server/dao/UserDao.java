@@ -10,6 +10,5 @@ public interface UserDao {
 	public void updateUser(User user);
 	public void deleteUser(String username);
 	public List<User> getConnectedUsers(String username);
-	public List<User> getUsersWaitingForAccept(String username);
-	
+
 }
