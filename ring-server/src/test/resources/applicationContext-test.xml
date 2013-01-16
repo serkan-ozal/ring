@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       						http://www.springframework.org/schema/beans/spring-beans.xsd
+       						http://www.springframework.org/schema/context
+       						http://www.springframework.org/schema/context/spring-context.xsd
+       						http://www.springframework.org/schema/task
+       						http://www.springframework.org/schema/task/spring-task.xsd
+       						http://www.springframework.org/schema/data/mongo
+                            http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+                            http://www.springframework.org/schema/mvc
+                            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                            http://www.springframework.org/schema/security
+                            http://www.springframework.org/schema/security/spring-security-3.1.xsd
+                            http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                            http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <context:component-scan base-package="tr.com.t2giants.ring.server"/>
+
+    <task:annotation-driven/>
+    <mvc:annotation-driven/>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:global.${targetPlatform}.properties</value>
+                <value>classpath:application.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"></property>
+    </bean>
+
+    <bean id="localDS" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${db.driver}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="user" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="localDS"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Security // Begin -->
+
+    <bean class="tr.com.t2giants.ring.server.filter.IncomingWebRequestAuditFilter"
+          id="incomingWebRequestAuditFilter"/>
+
+    <security:http auto-config="false" use-expressions="true" create-session="stateless"
+                   entry-point-ref="authenticationProcessingFilterEntryPoint">
+
+        <security:intercept-url pattern="/index.html" access="permitAll"/>
+        <security:intercept-url pattern="/login.html" access="permitAll"/>
+        <security:intercept-url pattern="/css/**" access="permitAll"/>
+        <security:intercept-url pattern="/js/**" access="permitAll"/>
+        <security:intercept-url pattern="/images/**" access="permitAll"/>
+
+        <security:intercept-url pattern="/settings/**" access="permitAll"/>
+
+        <!-- Register supporter -->
+        <security:intercept-url pattern="/api/users/add" access="permitAll"/>
+        <security:intercept-url pattern="/api/users/check/**" access="permitAll"/>
+        <security:intercept-url pattern="/api/users/get/**" access="permitAll"/>
+
+        <!-- supporter activation -->
+        <security:intercept-url pattern="/api/activation/activate/**" access="permitAll"/>
+
+        <security:custom-filter position="FORM_LOGIN_FILTER" ref="authenticationProcessingFilter"/>
+        <security:logout logout-url="/logout" delete-cookies="SPRING_SECURITY_REMEMBER_ME_COOKIE,clubsUserID,rmbrm"/>
+        <security:remember-me
+                key="${tokenBasedRememberMeServicesKey}"
+                services-ref="rememberMeServices"/>
+    </security:http>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="securityService">
+            <security:password-encoder hash="sha" ref="passwordEncoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
+
+    <security:global-method-security secured-annotations="enabled" proxy-target-class="true"/>
+
+    <bean id="authenticationProcessingFilter" class="tr.com.t2giants.ring.server.security.TokenBasedAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="rememberMeServices" ref="rememberMeServices"/>
+        <property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
+        <property name="authenticationSuccessHandler" ref="authenticationSuccessHandler"/>
+        <property name="postOnly" value="false"/>
+        <property name="allowSessionCreation" value="false"/>
+    </bean>
+
+    <bean id="authenticationProcessingFilterEntryPoint"
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <constructor-arg name="loginFormUrl" value="/login.html"/>
+        <property name="forceHttps" value="false"/>
+    </bean>
+
+
+    <bean id="authenticationSuccessHandler"
+          class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <property name="defaultTargetUrl">
+            <value>${defaultTargetUrl}</value>
+        </property>
+        <property name="alwaysUseDefaultTargetUrl" value="true"/>
+        <property name="redirectStrategy" ref="tokenBasedAuthenticationRedirectStrategy"/>
+    </bean>
+
+    <bean id="authenticationFailureHandler"
+          class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl">
+            <value>${authenticationFailureUrl}</value>
+        </property>
+    </bean>
+
+    <bean id="rememberMeServices"
+          class="tr.com.t2giants.ring.server.security.RequestHeaderCheckingPersistentTokenBasedRememberMeServices">
+        <constructor-arg name="key" value="${tokenBasedRememberMeServicesKey}"/>
+        <constructor-arg name="userDetailsService" ref="securityService"/>
+        <constructor-arg name="tokenRepository" ref="tokenRepository"/>
+    </bean>
+
+    <bean id="tokenRepository"
+          class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+        <property name="createTableOnStartup" value="false"/>
+        <property name="dataSource" ref="localDS"/>
+    </bean>
+
+    <bean id="tokenBasedAuthenticationRedirectStrategy"
+          class="tr.com.t2giants.ring.server.security.TokenBasedAuthenticationRedirectStrategy">
+        <property name="defaultTargetUrl">
+            <value>${defaultTargetUrl}</value>
+        </property>
+    </bean>
+
+    <!-- Security // End -->
+
+    <!-- mail sender -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="587"/>
+        <property name="username" value="ida4Clubs@gmail.com"/>
+        <property name="password" value="ida4Clubs!"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.debug">false</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.required">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- mail sender end -->
+
+    <!-- memCached -->
+    <bean id="memCachedPool" class="com.whalin.MemCached.SockIOPool" factory-method="getInstance"
+          init-method="initialize" destroy-method="shutDown">
+        <constructor-arg><value>whalinMemCachedPool</value></constructor-arg>
+        <property name="servers">
+            <list>
+                <value>127.0.0.1:11211</value>
+            </list>
+        </property>
+        <property name="initConn"><value>100</value></property>
+        <property name="minConn"><value>50</value></property>
+        <property name="maxConn"><value>500</value></property>
+        <property name="maintSleep"><value>30</value></property>
+        <property name="nagle"><value>false</value></property>
+        <property name="socketTO"><value>3000</value></property>
+    </bean>
+
+    <bean id="memCachedClient" class="com.whalin.MemCached.MemCachedClient">
+        <constructor-arg><value>whalinMemCachedPool</value></constructor-arg>
+    </bean>
+    <!-- memCached end -->
+
+    <!-- mongooooo -->
+
+    <mongo:mongo id="mongo"/>
+    <!-- defaults: host="127.0.0.1" port="27017"-->
+
+    <bean id="funItemsMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg>
+            <ref bean="mongo"/>
+        </constructor-arg>
+        <constructor-arg value="stritfun"/>
+    </bean>
+
+    <!-- mongooooo ends :( -->
+
+</beans>
