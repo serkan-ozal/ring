@@ -26,7 +26,7 @@ public class BaseRestTestCase extends BaseTestCase {
 
     protected static final String JSON = MediaType.APPLICATION_JSON;
 
-    protected static final String CLOUD_DOWNLOAD_PATH = "http://d1dgt2apkkbq37.cloudfront.net";
+    protected static final String CLOUD_DOWNLOAD_PATH = "http://d3oxg9ygieskmd.cloudfront.net";
     public static final String CLOUD_STREAM_PATH = "s1cp0j2rq4xbq.cloudfront.net";
     public static final String CLOUD_S3_CONTENT_PATH = "http://s3.amazonaws.com/idacontent";
     protected static final String CLOUD_S3_STREAM_PATH = "http://s3.amazonaws.com/idastreaming";

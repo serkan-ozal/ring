@@ -1,7 +1,7 @@
 package tr.com.t2giants.ring.server.data.validator;
 
 import org.springframework.stereotype.Service;
-import tr.com.t2giants.ring.server.data.Coordinates;
+import tr.com.t2giants.ring.core.domain.Coordinates;
 
 /**
  * User: soner

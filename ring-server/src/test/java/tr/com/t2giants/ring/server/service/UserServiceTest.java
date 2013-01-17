@@ -1,19 +1,12 @@
 package tr.com.t2giants.ring.server.service;
 
-import tr.com.t2giants.ring.server.BaseRestTestCase;
-import tr.com.t2giants.ring.server.data.Coordinates;
-import tr.com.t2giants.ring.server.data.FunItem;
-import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.data.builder.FunItemBuilder;
 import org.junit.Test;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
+import tr.com.t2giants.ring.server.BaseRestTestCase;
 
 import java.io.File;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.path.json.JsonPath.from;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: sonic

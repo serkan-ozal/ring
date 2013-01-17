@@ -1,11 +1,11 @@
 package tr.com.t2giants.ring.server.data.validator;
 
-import tr.com.t2giants.ring.server.data.Coordinates;
-import tr.com.t2giants.ring.core.domain.builder.CoordinatesBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+import tr.com.t2giants.ring.core.domain.Coordinates;
+import tr.com.t2giants.ring.core.domain.builder.CoordinatesBuilder;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

@@ -1,14 +1,14 @@
 package tr.com.t2giants.ring.server.data.validator;
 
-import tr.com.t2giants.ring.server.dao.UserDao;
-import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.util.ErrorMessages;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.dao.UserDao;
+import tr.com.t2giants.ring.server.util.ErrorMessages;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
