@@ -14,7 +14,6 @@ import tr.com.t2giants.ring.server.domain.User;
 @Service(value = "securityService")
 public class SecurityServiceImpl implements SecurityService {
 
-
     @Qualifier("tokenRepository")
     @Autowired
     private PersistentTokenRepository tokenRepository;
