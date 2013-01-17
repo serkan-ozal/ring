@@ -1,8 +1,8 @@
 package tr.com.t2giants.ring.server.dao.jdbc.rowmapper;
 
-import tr.com.t2giants.ring.server.data.User;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import tr.com.t2giants.ring.core.domain.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,9 +32,7 @@ public class UserRowMapper implements RowMapper<User> {
         result.setActivated(rs.getBoolean("activated"));
         result.setEnabled(rs.getBoolean("enabled"));
         result.setBirthDate(rs.getLong("birthDate"));
-        result.setFunItemCount(rs.getInt("funItemCount"));
-        result.setPeopleLikedFunItemCount(rs.getInt("peopleLikedFunItemCount"));
-        result.setFunItemLikedCount(rs.getInt("funItemLikedCount"));
+        result.setRingFriendCount(rs.getInt("ringFriendCount"));
         result.setCreationTime(rs.getLong("creationTime"));
 
         return result;

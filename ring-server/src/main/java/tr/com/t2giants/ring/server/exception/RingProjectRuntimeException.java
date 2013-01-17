@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * This exception is thrown when a runtime exception occurs like saving an object via DAO.
  */
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class StritFunRuntimeException extends RuntimeException {
+public class RingProjectRuntimeException extends RuntimeException {
 
-    public StritFunRuntimeException() {
+    public RingProjectRuntimeException() {
     }
 
-    public StritFunRuntimeException(String message) {
+    public RingProjectRuntimeException(String message) {
         super(message);
     }
 }

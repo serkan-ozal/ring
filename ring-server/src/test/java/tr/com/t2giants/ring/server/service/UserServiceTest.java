@@ -4,17 +4,11 @@ import tr.com.t2giants.ring.server.BaseRestTestCase;
 import tr.com.t2giants.ring.server.data.Coordinates;
 import tr.com.t2giants.ring.server.data.FunItem;
 import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.data.builder.CoordinatesBuilder;
 import tr.com.t2giants.ring.server.data.builder.FunItemBuilder;
-import tr.com.t2giants.ring.server.data.builder.UserBuilder;
-import tr.com.t2giants.ring.server.util.ErrorMessages;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.path.json.JsonPath.from;

@@ -1,11 +1,10 @@
-package tr.com.t2giants.ring.server.data;
+package tr.com.t2giants.ring.core.domain;
 
 /**
- * User: sonic
- * Date: 1/11/13
+ * User: soner
+ * Date: 1/17/13
  */
 public class Coordinates {
-
     private Double lat;
     private Double lon;
 
@@ -42,6 +41,4 @@ public class Coordinates {
 
         return Double.compare(that.lat, lat) == 0 && Double.compare(that.lon, lon) == 0;
     }
-
-
 }

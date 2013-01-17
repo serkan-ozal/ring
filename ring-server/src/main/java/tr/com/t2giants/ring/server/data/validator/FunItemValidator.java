@@ -1,11 +1,11 @@
 package tr.com.t2giants.ring.server.data.validator;
 
 import com.mysql.jdbc.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tr.com.t2giants.ring.server.data.Coordinates;
 import tr.com.t2giants.ring.server.data.FunItem;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * User: sonic

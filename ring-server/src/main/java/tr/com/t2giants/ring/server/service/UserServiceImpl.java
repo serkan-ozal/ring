@@ -1,10 +1,10 @@
 package tr.com.t2giants.ring.server.service;
 
-import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.service.helper.UserServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.service.helper.UserServiceHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
@@ -26,7 +26,8 @@ public class UserServiceImpl extends BaseService implements UserService {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON,
             produces = MediaType.APPLICATION_JSON)
-    public @ResponseBody User addUser(@RequestBody User user) {
+    public @ResponseBody
+    User addUser(@RequestBody User user) {
         return userServiceHelper.addUser(user);
     }
 
@@ -41,14 +42,16 @@ public class UserServiceImpl extends BaseService implements UserService {
     @RequestMapping(value = "/get/by-id/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
-    public User getUser(@PathVariable("id") long id) {
+    public @ResponseBody
+    User getUser(@PathVariable("id") long id) {
         return userServiceHelper.getUser(id);
     }
 
     @RequestMapping(value = "/get/by-username/{username}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
-    public User getUser(@PathVariable("username") String username) {
+    public @ResponseBody
+    User getUser(@PathVariable("username") String username) {
         return userServiceHelper.getUser(username);
     }
 

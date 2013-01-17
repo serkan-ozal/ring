@@ -1,7 +1,7 @@
 package tr.com.t2giants.ring.server.dao;
 
+import tr.com.t2giants.ring.core.domain.User;
 import tr.com.t2giants.ring.server.data.BaseObject;
-import tr.com.t2giants.ring.server.data.User;
 
 /**
  * User: sonic

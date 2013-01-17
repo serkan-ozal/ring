@@ -1,14 +1,14 @@
 package tr.com.t2giants.ring.server.data.validator;
 
 import com.mysql.jdbc.StringUtils;
-import tr.com.t2giants.ring.server.dao.UserDao;
-import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.util.ErrorMessages;
-import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.commons.validator.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.server.dao.UserDao;
+import tr.com.t2giants.ring.server.data.User;
+import tr.com.t2giants.ring.server.util.ErrorMessages;
+import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 /**
  * User: sonic

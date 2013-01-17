@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * this exception is thrown if credentials are not valid
  */
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class StritFunUnauthorizedException extends RuntimeException{
+public class RingProjectUnauthorizedException extends RuntimeException{
 
-    public StritFunUnauthorizedException(String message) {
+    public RingProjectUnauthorizedException(String message) {
         super(message);
     }
 }

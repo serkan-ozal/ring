@@ -1,12 +1,5 @@
 package tr.com.t2giants.ring.server.service.helper;
 
-import tr.com.t2giants.ring.server.data.enums.StreamType;
-import tr.com.t2giants.ring.server.exception.StritFunNotAcceptableException;
-import tr.com.t2giants.ring.server.exception.StritFunRuntimeException;
-import tr.com.t2giants.ring.server.exception.StritFunValidationException;
-import tr.com.t2giants.ring.server.service.AWSService;
-import tr.com.t2giants.ring.server.util.ErrorMessages;
-import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -16,6 +9,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.server.data.enums.StreamType;
+import tr.com.t2giants.ring.server.exception.RingProjectNotAcceptableException;
+import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
+import tr.com.t2giants.ring.server.exception.RingProjectValidationException;
+import tr.com.t2giants.ring.server.service.AWSService;
+import tr.com.t2giants.ring.server.util.ErrorMessages;
+import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +73,7 @@ public class StreamServiceHelperImpl implements StreamServiceHelper{
 
                             if (sizeInBytes > WebDesignParameters.MAXIMUM_FILE_SIZE_IN_BYTES) {
                                 logDebugMessage("Stream upload is rejected for supporter with id: " + id + " due to " + ErrorMessages.FILE_TOO_LARGE.getErrorMessage());
-                                throw new StritFunValidationException(ErrorMessages.FILE_TOO_LARGE.getErrorMessage());
+                                throw new RingProjectValidationException(ErrorMessages.FILE_TOO_LARGE.getErrorMessage());
                             }
 
                             InputStream inStream = item.getInputStream();
@@ -94,18 +94,18 @@ public class StreamServiceHelperImpl implements StreamServiceHelper{
                             }
                         } catch (IOException ex) {
                             logErrorMessage("Exception occurred during uploading supporter avatar for user with id: : " + id, ex);
-                            throw new StritFunRuntimeException();
+                            throw new RingProjectRuntimeException();
                         }
                     }
                 }
-                throw new StritFunNotAcceptableException();
+                throw new RingProjectNotAcceptableException();
             } catch (FileUploadException ex) {
                 logErrorMessage("Exception occurred during uploading supporter avatar for user with id: : " + id, ex);
-                throw new StritFunRuntimeException();
+                throw new RingProjectRuntimeException();
             }
         } else {
             logErrorMessage("Avatar upload data is not multipart content for user with id: : " + id, null);
-            throw new StritFunNotAcceptableException();
+            throw new RingProjectNotAcceptableException();
         }
     }
 
@@ -145,10 +145,10 @@ public class StreamServiceHelperImpl implements StreamServiceHelper{
 
                 return new String[] {smallPath, largeAvatarPath};
             } else {
-                throw new StritFunRuntimeException();
+                throw new RingProjectRuntimeException();
             }
         } catch (IOException e) {
-            throw new StritFunRuntimeException();
+            throw new RingProjectRuntimeException();
         }
     }
 

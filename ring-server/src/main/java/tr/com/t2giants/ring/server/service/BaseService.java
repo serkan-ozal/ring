@@ -1,15 +1,15 @@
 package tr.com.t2giants.ring.server.service;
 
-import tr.com.t2giants.ring.server.data.validator.ValidationList;
-import tr.com.t2giants.ring.server.exception.StritFunNotFoundException;
-import tr.com.t2giants.ring.server.exception.StritFunRuntimeException;
-import tr.com.t2giants.ring.server.exception.StritFunValidationException;
-import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import tr.com.t2giants.ring.server.data.validator.ValidationList;
+import tr.com.t2giants.ring.server.exception.RingProjectNotFoundException;
+import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
+import tr.com.t2giants.ring.server.exception.RingProjectValidationException;
+import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -40,24 +40,24 @@ public abstract class BaseService {
         return Response.ok().build();
     }
 
-    @ExceptionHandler(StritFunNotFoundException.class)
+    @ExceptionHandler(RingProjectNotFoundException.class)
     public
     @ResponseBody
     Response handleNotFoundException(Exception ex) {
         return Response.status(Response.Status.NOT_FOUND).entity(ex.getMessage()).build();
     }
 
-    @ExceptionHandler(StritFunRuntimeException.class)
+    @ExceptionHandler(RingProjectRuntimeException.class)
     public
     @ResponseBody
     Response handleRuntimeException(Exception ex) {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
     }
 
-    @ExceptionHandler(StritFunValidationException.class)
+    @ExceptionHandler(RingProjectValidationException.class)
     public
     @ResponseBody
-    Response handleValidationException(StritFunValidationException ex) {
+    Response handleValidationException(RingProjectValidationException ex) {
         return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
     }
 }

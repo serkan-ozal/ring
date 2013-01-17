@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Date: 7/24/12
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class StritFunNotFoundException extends RuntimeException {
+public class RingProjectNotFoundException extends RuntimeException {
 
-    public StritFunNotFoundException(String message) {
+    public RingProjectNotFoundException(String message) {
         super(message);
     }
 }

@@ -5,14 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.*;
+import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
-
-import tr.com.t2giants.ring.server.data.*;
-import tr.com.t2giants.ring.server.util.*;
 
 /**
  * User: mertcaliskan

@@ -1,8 +1,18 @@
 package tr.com.t2giants.ring.core.domain.builder;
 
-public interface Builder<T> {
+/**
+ * User: sonic
+ * Date: 1/15/13
+ */
+@SuppressWarnings("unchecked")
+abstract class Builder<T, B> {
 
-	public T build();
-	public T empty();
-	
+    long id;
+
+    public B id(long id) {
+        this.id = id;
+        return (B) this;
+    }
+
+    public abstract T build();
 }

@@ -1,7 +1,7 @@
 package tr.com.t2giants.ring.server.data.validator;
 
 import tr.com.t2giants.ring.server.data.Coordinates;
-import tr.com.t2giants.ring.server.data.builder.CoordinatesBuilder;
+import tr.com.t2giants.ring.core.domain.builder.CoordinatesBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

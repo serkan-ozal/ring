@@ -1,7 +1,5 @@
 package tr.com.t2giants.ring.server.service;
 
-import tr.com.t2giants.ring.server.dao.UserDao;
-import tr.com.t2giants.ring.server.data.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.dao.UserDao;
 
 
 /**

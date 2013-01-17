@@ -1,6 +1,6 @@
 package tr.com.t2giants.ring.server.service.helper;
 
-import tr.com.t2giants.ring.server.data.User;
+import tr.com.t2giants.ring.core.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 

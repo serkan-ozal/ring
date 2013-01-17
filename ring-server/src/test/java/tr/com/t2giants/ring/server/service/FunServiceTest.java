@@ -3,12 +3,9 @@ package tr.com.t2giants.ring.server.service;
 import tr.com.t2giants.ring.server.BaseRestTestCase;
 import tr.com.t2giants.ring.server.data.Coordinates;
 import tr.com.t2giants.ring.server.data.FunItem;
-import tr.com.t2giants.ring.server.data.builder.CoordinatesBuilder;
 import tr.com.t2giants.ring.server.data.builder.FunItemBuilder;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
-import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import org.apache.commons.lang.RandomStringUtils;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 

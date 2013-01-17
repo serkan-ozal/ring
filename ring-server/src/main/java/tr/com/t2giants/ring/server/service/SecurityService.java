@@ -10,6 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 public interface SecurityService extends UserDetailsService {
 
-    @Secured({"ROLE_ADMIN", "ROLE_SUPPORTER"})
+    @Secured({"ROLE_USER"})
     void logout(UserDetails userDetails);
 }

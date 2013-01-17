@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Date: 11/12/12
  */
 @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-public class StritFunNotAcceptableException extends RuntimeException{
+public class RingProjectNotAcceptableException extends RuntimeException{
 
-    public StritFunNotAcceptableException() {
+    public RingProjectNotAcceptableException() {
         super();
     }
 }

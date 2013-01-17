@@ -1,6 +1,6 @@
-package tr.com.t2giants.ring.server.data.builder;
+package tr.com.t2giants.ring.core.domain.builder;
 
-import tr.com.t2giants.ring.server.data.Coordinates;
+import tr.com.t2giants.ring.core.domain.Coordinates;
 
 /**
  * User: soner

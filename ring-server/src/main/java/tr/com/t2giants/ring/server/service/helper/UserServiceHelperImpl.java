@@ -1,16 +1,16 @@
 package tr.com.t2giants.ring.server.service.helper;
 
-import tr.com.t2giants.ring.server.dao.UserDao;
-import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.data.enums.StreamType;
-import tr.com.t2giants.ring.server.data.validator.UserValidator;
-import tr.com.t2giants.ring.server.data.validator.ValidationList;
-import tr.com.t2giants.ring.server.exception.StritFunValidationException;
-import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.dao.UserDao;
+import tr.com.t2giants.ring.server.data.enums.StreamType;
+import tr.com.t2giants.ring.server.data.validator.UserValidator;
+import tr.com.t2giants.ring.server.data.validator.ValidationList;
+import tr.com.t2giants.ring.server.exception.RingProjectValidationException;
+import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,7 +38,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
 
         final ValidationList validationList = userValidator.validateCreationData(user);
         if (!validationList.isEmpty()) {
-            throw new StritFunValidationException(validationList.get(0));
+            throw new RingProjectValidationException(validationList.get(0));
         }
 
         setDefaultValues(user);
@@ -59,9 +59,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         user.setAccountNonLocked(true);
         user.setActivated(false);
         user.setEnabled(true);
-        user.setFunItemCount(0);
-        user.setPeopleLikedFunItemCount(0);
-        user.setFunItemLikedCount(0);
+        user.setRingFriendCount(0);
         user.setCreationTime(System.currentTimeMillis());
     }
 
@@ -71,7 +69,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
 
         final ValidationList validationList = userValidator.validateCreationData(user);
         if (!validationList.isEmpty()) {
-            throw new StritFunValidationException(validationList);
+            throw new RingProjectValidationException(validationList);
         }
 
         userDao.updateUser(id, user);

@@ -1,4 +1,4 @@
-package tr.com.t2giants.ring.server.data;
+package tr.com.t2giants.ring.core.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 

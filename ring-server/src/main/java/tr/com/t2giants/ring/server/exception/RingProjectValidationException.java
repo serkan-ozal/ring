@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Date: 7/25/12
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class StritFunValidationException extends RuntimeException {
+public class RingProjectValidationException extends RuntimeException {
 
-    public StritFunValidationException(ValidationList validationList) {
+    public RingProjectValidationException(ValidationList validationList) {
         super(validationList.toString());
     }
 
-    public StritFunValidationException(String message) {
+    public RingProjectValidationException(String message) {
         super(message);
     }
 }

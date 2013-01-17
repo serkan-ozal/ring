@@ -1,7 +1,7 @@
 package tr.com.t2giants.ring.server.data.validator;
 
 import tr.com.t2giants.ring.server.data.User;
-import tr.com.t2giants.ring.server.data.builder.UserBuilder;
+import tr.com.t2giants.ring.core.domain.builder.UserBuilder;
 import tr.com.t2giants.ring.server.helper.ValidUserValues;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
 import org.junit.Test;
