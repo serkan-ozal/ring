@@ -1,4 +1,4 @@
+atlassian-ide-plugin.xml
 /.settings/
-/target/
-/.classpath
 /.project
+/.idea/
