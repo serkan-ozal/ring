@@ -1,12 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    /> 
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="160dip"
+        android:layout_above="@+id/tableLayout"
+        android:layout_marginTop="8dip"
+        android:src="@drawable/ring" />
+    
+    <TableLayout 
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dip"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="8dip">
+        <TableRow  
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content">
+            <TextView
+		        android:layout_width="8dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/username"/>
+            <EditText
+                android:id="@+id/txtUsername"
+		        android:layout_width="8dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text=""/>
+        </TableRow>
+        <TableRow  
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content">
+            <TextView
+		        android:layout_width="8dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="@string/password"/>
+            <EditText
+                android:id="@+id/txtPassword"
+		        android:layout_width="8dip"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text=""/>
+        </TableRow>
+        <TableRow  
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content">
+            <Button
+        		android:id="@+id/btnClear"
+        		android:layout_width="8dip"
+       	 		android:layout_height="wrap_content"
+       	 		android:layout_weight="1"
+        		android:text="@string/clear" 
+        		android:drawableLeft="@drawable/clear"/>
+         	<Button
+        		android:id="@+id/btnSend"
+        		android:layout_width="8dip"
+       	 		android:layout_height="wrap_content"
+       	 		android:layout_weight="1"
+        		android:text="@string/send" 
+        		android:drawableLeft="@drawable/login"/>
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>
