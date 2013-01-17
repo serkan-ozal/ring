@@ -1,6 +1,6 @@
 package tr.com.t2giants.ring.server.service.helper;
 
-import tr.com.t2giants.ring.server.data.enums.StreamType;
+import tr.com.t2giants.ring.server.domain.enums.StreamType;
 
 import javax.servlet.http.HttpServletRequest;
 

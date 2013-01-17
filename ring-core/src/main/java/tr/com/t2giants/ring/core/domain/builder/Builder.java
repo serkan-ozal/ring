@@ -5,7 +5,7 @@ package tr.com.t2giants.ring.core.domain.builder;
  * Date: 1/15/13
  */
 @SuppressWarnings("unchecked")
-abstract class Builder<T, B> {
+public abstract class Builder<T, B> {
 
     long id;
 

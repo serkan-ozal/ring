@@ -17,7 +17,8 @@ public class IncomingWebRequestAuditFilter implements Filter {
 
     private final Log logger = LogFactory.getLog(IncomingWebRequestAuditFilter.class);
 
-    private void logErrorMessage(String logMessage, Throwable e) {
+    @SuppressWarnings("unused")
+	private void logErrorMessage(String logMessage, Throwable e) {
         if (logger.isErrorEnabled()) {
             logger.error(logMessage, e);
         }

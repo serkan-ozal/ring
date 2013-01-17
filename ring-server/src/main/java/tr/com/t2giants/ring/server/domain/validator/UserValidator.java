@@ -1,4 +1,4 @@
-package tr.com.t2giants.ring.server.data.validator;
+package tr.com.t2giants.ring.server.domain.validator;
 
 import com.mysql.jdbc.StringUtils;
 import org.joda.time.DateMidnight;
@@ -6,7 +6,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.com.t2giants.ring.core.domain.User;
+
+import tr.com.t2giants.ring.server.domain.User;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
 
 /**

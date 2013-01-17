@@ -3,7 +3,8 @@ package tr.com.t2giants.ring.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import tr.com.t2giants.ring.core.domain.User;
+
+import tr.com.t2giants.ring.server.domain.User;
 import tr.com.t2giants.ring.server.service.helper.UserServiceHelper;
 
 import javax.servlet.http.HttpServletRequest;

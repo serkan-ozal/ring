@@ -1,13 +1,12 @@
 package tr.com.t2giants.ring.server.dao;
 
-import tr.com.t2giants.ring.core.domain.BaseObject;
-import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.domain.User;
 
 /**
  * User: sonic
  * Date: 1/7/13
  */
-public interface UserDao <T extends BaseObject> extends BaseDao<T> {
+public interface UserDao extends BaseDao<User> {
 
     int insertUser(User user);
 

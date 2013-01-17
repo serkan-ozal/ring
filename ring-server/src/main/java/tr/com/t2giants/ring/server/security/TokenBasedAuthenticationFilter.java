@@ -4,10 +4,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * User: mertcaliskan
- * Date: 6/20/12
- */
 public class TokenBasedAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     protected String obtainPassword(HttpServletRequest request) {

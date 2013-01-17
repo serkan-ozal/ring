@@ -4,11 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * User: mertcaliskan
- * Date: 7/25/12
  *
  * This exception is thrown when a runtime exception occurs like saving an object via DAO.
  */
+@SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class RingProjectRuntimeException extends RuntimeException {
 

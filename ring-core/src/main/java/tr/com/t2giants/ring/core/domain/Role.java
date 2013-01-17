@@ -1,23 +1,9 @@
 package tr.com.t2giants.ring.core.domain;
 
-import org.springframework.security.core.GrantedAuthority;
+@SuppressWarnings("serial")
+public class Role extends BaseObject {
 
-/**
- * User: mertcaliskan
- * Date: 6/14/12
- */
-public class Role extends BaseObject implements GrantedAuthority {
-
-    private long id;
-    private String name;
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    protected String name;
 
     public String getName() {
         return name;

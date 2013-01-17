@@ -6,9 +6,10 @@ import java.io.Serializable;
  * User: sonic
  * Date: 1/6/13
  */
+@SuppressWarnings("serial")
 public abstract class BaseObject implements Serializable {
 
-    private long id;
+	protected long id;
 
     public long getId() {
         return id;

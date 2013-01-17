@@ -9,7 +9,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
   
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>ring-core</artifactId>
+  	<modelVersion>4.0.0</modelVersion>
+  	<artifactId>ring-core</artifactId>
 
 </project>
