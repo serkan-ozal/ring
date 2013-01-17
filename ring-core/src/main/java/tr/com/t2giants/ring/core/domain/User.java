@@ -1,32 +1,26 @@
 package tr.com.t2giants.ring.core.domain;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-public class User extends BaseObject implements UserDetails {
+@SuppressWarnings("serial")
+public class User extends BaseObject {
 
-    private String username;
-    private String fullName;
-    private String password;
-    private String email;
-    private String about;
-    private String avatarImage;
-    private String avatarThumbnail;
-    private boolean credentialsNonExpired;
-    private boolean accountNonLocked;
-    private boolean activated;
-    private boolean enabled;
-    private long birthDate;
-    private int ringFriendCount;
-    private long creationTime;
-
-    private List<Role> roles = new ArrayList<Role>();
+	protected String username;
+	protected String fullName;
+	protected String password;
+	protected String email;
+	protected String about;
+	protected String avatarImage;
+	protected String avatarThumbnail;
+	protected boolean credentialsNonExpired;
+	protected boolean accountNonLocked;
+	protected boolean activated;
+	protected boolean enabled;
+	protected long birthDate;
+	protected int ringFriendCount;
+	protected long creationTime;
+	protected List<? extends Role> roles = new ArrayList<Role>();
 
     public String getUsername() {
         return username;
@@ -84,8 +78,7 @@ public class User extends BaseObject implements UserDetails {
         this.avatarThumbnail = avatarThumbnail;
     }
 
-    @Override
-    @JsonProperty("credentialsNonExpired")
+
     public boolean isAccountNonExpired() {
         return credentialsNonExpired;
     }
@@ -146,13 +139,12 @@ public class User extends BaseObject implements UserDetails {
         this.creationTime = creationTime;
     }
 
-    public List<Role> getRoles() {
+    public List<? extends Role> getRoles() {
         return roles;
     }
+    
+    public void setRoles(List<? extends Role> roles) {
+		this.roles = roles;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-	
 }

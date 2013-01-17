@@ -1,6 +1,7 @@
 package tr.com.t2giants.ring.core.domain.builder;
 
 import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.core.domain.builder.Builder;
 
 /**
  * User: sonic
@@ -23,7 +24,7 @@ public class UserBuilder extends Builder<User, UserBuilder> {
     private int ringFriendCount;
     private long creationTime;
 
-    @Override
+   
     public User build() {
         User user = new User();
 
