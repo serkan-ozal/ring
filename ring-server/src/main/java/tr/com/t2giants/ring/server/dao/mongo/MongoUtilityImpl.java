@@ -1,6 +1,6 @@
 package tr.com.t2giants.ring.server.dao.mongo;
 
-import tr.com.t2giants.ring.server.data.FunItem;
+import tr.com.t2giants.ring.core.domain.RingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -32,29 +32,30 @@ public class MongoUtilityImpl implements MongoUtility {
     @Qualifier("funItemsMongoTemplate")
     private MongoOperations mongoTemplate;
 
-    @PostConstruct
+    @SuppressWarnings("unused")
+	@PostConstruct
     private void initializeIndexes() {
         mongoTemplate.indexOps(COLLECTION_NAME).ensureIndex(new GeospatialIndex("location"));
     }
 
     @Override
-    public void addFunItem(FunItem funItem) {
+    public void addRingItem(RingItem funItem) {
         mongoTemplate.insert(funItem);
     }
 
     @Override
-    public void removeFunItem(String id) {
+    public void removeRingItem(String id) {
         mongoTemplate.remove(query(where("id").is(id)), COLLECTION_NAME);
     }
 
     @Override
-    public List<FunItem> getFunItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon) {
+    public List<RingItem> getRingItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon) {
         Criteria criteria = new Criteria(LOCATION).within(new Box(new Point(topLeftLon, topLeftLat), new Point(bottomRightLon, bottomRightLat)));
-        return mongoTemplate.find(new Query(criteria), FunItem.class);
+        return mongoTemplate.find(new Query(criteria), RingItem.class);
     }
 
     @Override
-    public FunItem getFunItem(String id) {
-        return mongoTemplate.findById(id, FunItem.class);
+    public RingItem getRingItem(String id) {
+        return mongoTemplate.findById(id, RingItem.class);
     }
 }

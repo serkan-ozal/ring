@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
 
-/**
- * User: mertcaliskan
- * Date: 6/20/12
- */
 public class RequestHeaderCheckingPersistentTokenBasedRememberMeServices extends PersistentTokenBasedRememberMeServices implements WebDesignParameters {
 
     private final PersistentTokenRepository tokenRepository;

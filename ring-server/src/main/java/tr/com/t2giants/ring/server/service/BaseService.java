@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import tr.com.t2giants.ring.server.data.validator.ValidationList;
+
+import tr.com.t2giants.ring.server.domain.validator.ValidationList;
 import tr.com.t2giants.ring.server.exception.RingProjectNotFoundException;
 import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
 import tr.com.t2giants.ring.server.exception.RingProjectValidationException;
@@ -14,10 +15,6 @@ import tr.com.t2giants.ring.server.util.WebDesignParameters;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-/**
- * User: mertcaliskan
- * Date: 6/12/12
- */
 public abstract class BaseService {
 
     @Autowired

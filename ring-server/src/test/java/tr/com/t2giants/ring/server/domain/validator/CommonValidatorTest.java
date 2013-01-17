@@ -1,4 +1,4 @@
-package tr.com.t2giants.ring.server.data.validator;
+package tr.com.t2giants.ring.server.domain.validator;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import tr.com.t2giants.ring.core.domain.User;
 import tr.com.t2giants.ring.server.dao.UserDao;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
 
@@ -28,7 +27,7 @@ public class CommonValidatorTest {
     private final CommonValidationsImpl impl = new CommonValidationsImpl();
 
     @Mock
-    private UserDao<User> userDao;
+    private UserDao userDao;
 
     private final int USERNAME_MAX_LENGTH = 15;
     private final int PASSWORD_MAX_LENGTH = 15;

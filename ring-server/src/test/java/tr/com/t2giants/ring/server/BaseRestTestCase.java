@@ -86,7 +86,8 @@ public class BaseRestTestCase extends BaseTestCase {
         requestHeaders.set(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY, password);
         requestHeaders.set(AbstractRememberMeServices.DEFAULT_PARAMETER, "true");
 
-        HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+		HttpEntity requestEntity = new HttpEntity(requestHeaders);
         HttpEntity<String> response = restTemplate.exchange(BASE_JETTY_URL + "/j_spring_security_check", HttpMethod.GET, requestEntity, String.class);
 
         return response.getHeaders().getFirst(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY);

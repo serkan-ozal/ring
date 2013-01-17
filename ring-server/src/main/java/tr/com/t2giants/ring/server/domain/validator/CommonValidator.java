@@ -1,4 +1,4 @@
-package tr.com.t2giants.ring.server.data.validator;
+package tr.com.t2giants.ring.server.domain.validator;
 
 import tr.com.t2giants.ring.server.util.ErrorMessages;
 

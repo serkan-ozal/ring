@@ -7,10 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * User: mertcaliskan
- * Date: 6/27/12
- */
 public class TokenBasedAuthenticationRedirectStrategy extends DefaultRedirectStrategy {
 
     private String defaultTargetUrl;

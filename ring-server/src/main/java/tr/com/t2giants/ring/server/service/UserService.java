@@ -1,7 +1,8 @@
 package tr.com.t2giants.ring.server.service;
 
 import org.springframework.security.access.annotation.Secured;
-import tr.com.t2giants.ring.core.domain.User;
+
+import tr.com.t2giants.ring.server.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 

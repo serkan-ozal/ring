@@ -9,10 +9,6 @@ import tr.com.t2giants.ring.server.dao.BaseDao;
 
 import javax.sql.DataSource;
 
-/**
- * User: mertcaliskan
- * Date: 6/11/12
- */
 public abstract class BaseDaoJDBC<T extends BaseObject> implements BaseDao<T> {
 
     @Qualifier("localDS")

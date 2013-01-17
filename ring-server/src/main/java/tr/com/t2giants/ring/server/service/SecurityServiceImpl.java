@@ -8,14 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
-import tr.com.t2giants.ring.core.domain.User;
 import tr.com.t2giants.ring.server.dao.UserDao;
+import tr.com.t2giants.ring.server.domain.User;
 
-
-/**
- * User: mertcaliskan
- * Date: 6/14/12
- */
 @Service(value = "securityService")
 public class SecurityServiceImpl implements SecurityService {
 

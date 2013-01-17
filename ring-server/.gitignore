@@ -3,3 +3,6 @@ target
 *.ipr
 *.iws
 atlassian-ide-plugin.xml
+/.settings/
+/.classpath
+/.project

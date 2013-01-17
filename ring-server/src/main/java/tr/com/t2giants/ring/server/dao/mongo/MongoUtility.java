@@ -1,6 +1,6 @@
 package tr.com.t2giants.ring.server.dao.mongo;
 
-import tr.com.t2giants.ring.server.data.FunItem;
+import tr.com.t2giants.ring.core.domain.RingItem;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import java.util.List;
  */
 public interface MongoUtility {
 
-    void addFunItem(FunItem funItem);
+    void addRingItem(RingItem ringItem);
 
-    void removeFunItem(String id);
+    void removeRingItem(String id);
 
-    List<FunItem> getFunItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon);
+    List<RingItem> getRingItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon);
 
-    FunItem getFunItem(String id);
+    RingItem getRingItem(String id);
 }

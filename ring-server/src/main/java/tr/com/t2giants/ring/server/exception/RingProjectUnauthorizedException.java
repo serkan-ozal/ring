@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Date: 8/9/12
  * this exception is thrown if credentials are not valid
  */
+@SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class RingProjectUnauthorizedException extends RuntimeException{
 

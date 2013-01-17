@@ -11,7 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tr.com.t2giants.ring.server.data.enums.StreamType;
+
+import tr.com.t2giants.ring.server.domain.enums.StreamType;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -35,7 +36,8 @@ public class AWSServiceImpl implements AWSService{
     @Value("${cloud.bucket.content.url}")
     private String contentURLPrefix;
 
-    @Value("${cloud.bucket.s3.content.url}")
+    @SuppressWarnings("unused")
+	@Value("${cloud.bucket.s3.content.url}")
     private String s3ContentURL;
 
     @Value("${targetPlatform}")

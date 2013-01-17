@@ -1,4 +1,4 @@
-package tr.com.t2giants.ring.server.data.enums;
+package tr.com.t2giants.ring.server.domain.enums;
 
 /**
  * User: sonic
