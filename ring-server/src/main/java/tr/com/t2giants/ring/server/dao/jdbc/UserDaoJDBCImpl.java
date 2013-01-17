@@ -1,5 +1,10 @@
 package tr.com.t2giants.ring.server.dao.jdbc;
 
+import tr.com.t2giants.ring.server.dao.UserDao;
+import tr.com.t2giants.ring.server.data.Role;
+import tr.com.t2giants.ring.server.data.User;
+import tr.com.t2giants.ring.server.exception.StritFunRuntimeException;
+import tr.com.t2giants.ring.server.util.ErrorMessages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +13,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import tr.com.t2giants.ring.core.domain.Role;
-import tr.com.t2giants.ring.core.domain.User;
-import tr.com.t2giants.ring.server.dao.UserDao;
-import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
-import tr.com.t2giants.ring.server.util.ErrorMessages;
 
 import javax.annotation.PostConstruct;
 
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
  * Date: 1/7/13
  */
 @Repository
-public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> {
+public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User>{
 
     private final Log logger = LogFactory.getLog(UserDaoJDBCImpl.class);
 
@@ -60,14 +60,16 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> 
                 .addValue("activated", user.isActivated())
                 .addValue("enabled", user.isEnabled())
                 .addValue("birthDate", user.getBirthDate())
-                .addValue("ringFriendCount", user.getRingFriendCount())
+                .addValue("funItemCount", user.getFunItemCount())
+                .addValue("peopleLikedFunItemCount", user.getPeopleLikedFunItemCount())
+                .addValue("funItemLikedCount", user.getFunItemLikedCount())
                 .addValue("creationTime", user.getCreationTime());
 
         try {
             return insertSupporter.executeAndReturnKey(userParameters).intValue();
         } catch (Exception e) {
             logger.error("Exception occurred during creating supporter " + user.toString(), e);
-            throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+            throw new StritFunRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
         }
     }
 
@@ -122,7 +124,7 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> 
             );
         } catch (Exception e) {
             logger.error("Exception occurred during updating user with id " + id, e);
-            throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+            throw new StritFunRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
         }
     }
 
@@ -164,7 +166,7 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> 
         } catch (EmptyResultDataAccessException ignored) {
         } catch (Exception e) {
             logger.error("Exception occurred during fetching avatar of user with id " + id, e);
-            throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+            throw new StritFunRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
         }
         return null;
     }
@@ -178,7 +180,7 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> 
         } catch (EmptyResultDataAccessException ignored) {
         } catch (Exception e) {
             logger.error("Exception occurred during fetching avatar of user with id " + id, e);
-            throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+            throw new StritFunRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
         }
         return null;
     }
@@ -193,7 +195,7 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> 
         } catch (Exception e) {
             logger.error("Exception occurred during updating avatar of supporter with id " + id, e);
         }
-        throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+        throw new StritFunRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
     }
 
 }
