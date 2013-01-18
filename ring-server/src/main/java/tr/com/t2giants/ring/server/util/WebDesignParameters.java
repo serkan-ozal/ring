@@ -7,7 +7,7 @@ package tr.com.t2giants.ring.server.util;
  */
 public interface WebDesignParameters {
 
-    String DEFAULT_URL_PATH = "http://stritfun.com/";
+    String DEFAULT_URL_PATH = "http://ring.com/";
 
     String DEFAULT_API_PATH = "http://192.168.2.161:8080/api";
 

@@ -1,15 +1,13 @@
 package tr.com.t2giants.ring.server.dao.jdbc;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import tr.com.t2giants.ring.core.domain.Role;
-import tr.com.t2giants.ring.core.domain.User;
+import tr.com.t2giants.ring.server.domain.Role;
+import tr.com.t2giants.ring.server.domain.User;
 import tr.com.t2giants.ring.server.dao.UserDao;
 import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
@@ -21,9 +19,7 @@ import javax.annotation.PostConstruct;
  * Date: 1/7/13
  */
 @Repository
-public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao<User> {
-
-    private final Log logger = LogFactory.getLog(UserDaoJDBCImpl.class);
+public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao {
 
     private final String tableNameUser = "User";
 

@@ -1,5 +1,7 @@
 package tr.com.t2giants.ring.server.dao.jdbc;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
@@ -11,7 +13,9 @@ import javax.sql.DataSource;
 
 public abstract class BaseDaoJDBC<T extends BaseObject> implements BaseDao<T> {
 
-    @Qualifier("localDS")
+    protected final Log logger = LogFactory.getLog(getClass());
+	
+	@Qualifier("localDS")
     @Autowired
     protected DataSource dataSource;
 

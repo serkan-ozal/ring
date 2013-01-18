@@ -206,7 +206,7 @@
         <constructor-arg>
             <ref bean="mongo"/>
         </constructor-arg>
-        <constructor-arg value="stritfun"/>
+        <constructor-arg value="ring"/>
     </bean>
 
     <!-- mongooooo ends :( -->
