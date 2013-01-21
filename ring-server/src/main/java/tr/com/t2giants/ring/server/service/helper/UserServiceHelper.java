@@ -25,4 +25,6 @@ public interface UserServiceHelper {
     String getAvatarThumb(long id);
 
     String getAvatar(long id);
+
+    void deactivateUser(long loggedInUserID);
 }

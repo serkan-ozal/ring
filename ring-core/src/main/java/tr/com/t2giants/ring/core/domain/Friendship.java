@@ -4,7 +4,6 @@ package tr.com.t2giants.ring.core.domain;
  * User: sonic
  * Date: 1/21/13
  */
-@SuppressWarnings("serial")
 public class Friendship extends BaseObject {
 
     protected long followerID;

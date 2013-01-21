@@ -25,4 +25,6 @@ public interface UserDao extends BaseDao<User> {
     String getAvatarThumb(long requesterSupporterID);
 
     String setAvatarURL(long id, String[] avatarURL);
+
+    void deactivateUser(long id);
 }

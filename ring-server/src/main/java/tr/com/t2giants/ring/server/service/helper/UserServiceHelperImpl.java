@@ -124,4 +124,10 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         return userDao.getAvatarURL(id);
     }
 
+    @Override
+    public void deactivateUser(long loggedInUserID) {
+        userDao.deactivateUser(loggedInUserID);
+        ringCacheManager.removeUserFromCache(loggedInUserID);
+    }
+
 }

@@ -33,9 +33,13 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userServiceHelper.addUser(user);
     }
 
-    @Override
-    public Response deactivateUser() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @RequestMapping(value = "/deactivate",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON)
+    public @ResponseBody
+    Response deactivateUser() {
+        userServiceHelper.deactivateUser(getLoggedInUserID());
+        return responseOK();
     }
 
     @RequestMapping(value = "/update",

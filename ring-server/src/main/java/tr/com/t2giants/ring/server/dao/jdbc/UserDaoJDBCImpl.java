@@ -192,4 +192,16 @@ public class UserDaoJDBCImpl extends BaseDaoJDBC<User> implements UserDao {
         throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
     }
 
+    @Override
+    public void deactivateUser(long id) {
+        try {
+            getJDBCTemplate().update(
+                    "UPDATE " + tableNameUser + " SET enabled = 0 WHERE id = ?",
+                    id);
+        } catch (Exception e) {
+            logger.error("Exception occurred during updating avatar of supporter with id " + id, e);
+        }
+        throw new RingProjectRuntimeException(ErrorMessages.CANNOT_COMPLETE_OPERATION.getErrorMessage());
+    }
+
 }
