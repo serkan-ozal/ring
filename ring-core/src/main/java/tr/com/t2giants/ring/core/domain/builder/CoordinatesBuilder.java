@@ -3,7 +3,7 @@ package tr.com.t2giants.ring.core.domain.builder;
 import tr.com.t2giants.ring.core.domain.Coordinates;
 
 /**
- * User: soner
+ * User: sonic
  * Date: 1/15/13
  */
 public class CoordinatesBuilder extends Builder<Coordinates, CoordinatesBuilder> {

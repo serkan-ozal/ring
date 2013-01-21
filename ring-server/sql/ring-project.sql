@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `Friendship`
+--
+
+DROP TABLE IF EXISTS `Friendship`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Friendship` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `following` bigint(20) NOT NULL,
+  `follower` bigint(20) NOT NULL,
+  `creationTime` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Friendship`
+--
+
+LOCK TABLES `Friendship` WRITE;
+/*!40000 ALTER TABLE `Friendship` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Friendship` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `User`
 --
 
@@ -53,6 +78,56 @@ INSERT INTO `User` VALUES (1,'serkan','Serkan Özer','d033e22ae348aeb5660fc2140a
 UNLOCK TABLES;
 
 --
+-- Table structure for table `friendship_requests`
+--
+
+DROP TABLE IF EXISTS `friendship_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `friendship_requests` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `requesterID` bigint(20) NOT NULL,
+  `requestedID` bigint(20) NOT NULL,
+  `creationTime` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `friendship_requests`
+--
+
+LOCK TABLES `friendship_requests` WRITE;
+/*!40000 ALTER TABLE `friendship_requests` DISABLE KEYS */;
+/*!40000 ALTER TABLE `friendship_requests` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `gcm_users`
+--
+
+DROP TABLE IF EXISTS `gcm_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gcm_users` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `gcmRegID` text NOT NULL,
+  `userID` bigint(50) NOT NULL,
+  `creationTime` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `gcm_users`
+--
+
+LOCK TABLES `gcm_users` WRITE;
+/*!40000 ALTER TABLE `gcm_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `gcm_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `persistent_logins`
 --
 
@@ -86,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-17 13:35:00
+-- Dump completed on 2013-01-21 17:18:57
