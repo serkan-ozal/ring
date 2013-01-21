@@ -1,7 +1,9 @@
 package tr.com.t2giants.ring.core.domain;
 
+import java.io.Serializable;
+
 @SuppressWarnings("serial")
-public class Role extends BaseObject {
+public class Role extends BaseObject implements Serializable {
 
     protected String name;
 

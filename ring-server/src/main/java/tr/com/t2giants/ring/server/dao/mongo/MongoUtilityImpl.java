@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.core.domain.RingUserLastPosition;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -24,38 +25,32 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Service
 public class MongoUtilityImpl implements MongoUtility {
 
-    private static final String COLLECTION_NAME = "funItem";
+    private static final String COLLECTION_NAME = "RingUserLastPosition";
 
-    private static final String LOCATION = "coordinates";
+    private static final String LOCATION = "lastPosition";
 
     @Autowired
-    @Qualifier("funItemsMongoTemplate")
+    @Qualifier("ringMongoTemplate")
     private MongoOperations mongoTemplate;
 
-    @SuppressWarnings("unused")
 	@PostConstruct
     private void initializeIndexes() {
-        mongoTemplate.indexOps(COLLECTION_NAME).ensureIndex(new GeospatialIndex("location"));
+        mongoTemplate.indexOps(COLLECTION_NAME).ensureIndex(new GeospatialIndex(LOCATION));
     }
 
     @Override
-    public void addRingItem(RingItem funItem) {
+    public void addLastPosition(RingItem funItem) {
         mongoTemplate.insert(funItem);
     }
 
     @Override
-    public void removeRingItem(String id) {
-        mongoTemplate.remove(query(where("id").is(id)), COLLECTION_NAME);
+    public RingUserLastPosition addLastPosition(long id) {
+        return mongoTemplate.findOne(query(where("id").is(id)), RingUserLastPosition.class);
     }
 
     @Override
-    public List<RingItem> getRingItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon) {
+    public List<RingUserLastPosition> getNearByUsers(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon) {
         Criteria criteria = new Criteria(LOCATION).within(new Box(new Point(topLeftLon, topLeftLat), new Point(bottomRightLon, bottomRightLat)));
-        return mongoTemplate.find(new Query(criteria), RingItem.class);
-    }
-
-    @Override
-    public RingItem getRingItem(String id) {
-        return mongoTemplate.findById(id, RingItem.class);
+        return mongoTemplate.find(new Query(criteria), RingUserLastPosition.class);
     }
 }

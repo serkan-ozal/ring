@@ -22,6 +22,7 @@ public enum ErrorMessages {
     USERNAME_CONTAINS_SPACE("username.contains.space"),
     PASSWORD_TOO_SHORT("password.too.short"),
     PASSWORD_MAX_CHAR_EXCEEDED("password.too.long"),
+    CANNOT_FIND_USER("Cannot find user"),
     SAME_SPORTING_EVENT_EXISTS("same.sporting.event.exists"),
     COUNTERS_ARE_NOT_ZERO("counters.are.not.zero"),
     INVALID_SEASON("invalid.season"),

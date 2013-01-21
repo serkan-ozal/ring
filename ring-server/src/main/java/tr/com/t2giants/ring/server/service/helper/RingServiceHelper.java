@@ -9,9 +9,15 @@ import java.util.List;
  * Date: 1/21/13
  */
 public interface RingServiceHelper {
-    void addToRing(long loggedInUserID, long id);
+
+    void requestToAddToRing(long loggedInUserID, long id);
+
+    void acceptRequest(Long loggedInUserID, long id);
+
+    void discardRequest(Long loggedInUserID, long id);
 
     void removeFromRing(long loggedInUserID, long id);
 
     List<User> getRingOfUser(long loggedInUserID);
+
 }

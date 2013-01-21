@@ -21,11 +21,27 @@ public class RingServiceImpl extends BaseService implements RingService {
     @Autowired
     private RingServiceHelper ringServiceHelper;
 
-    @RequestMapping(value = "/add/{id}",
+    @RequestMapping(value = "/request/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
-    public Response addToRing(@PathVariable("id") long id) {
-        ringServiceHelper.addToRing(getLoggedInUserID(), id);
+    public Response requestToAddToRing(@PathVariable("id") long id) {
+        ringServiceHelper.requestToAddToRing(getLoggedInUserID(), id);
+        return responseOK();
+    }
+
+    @RequestMapping(value = "/accept/{id}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON)
+    public Response acceptRequest(long id) {
+        ringServiceHelper.acceptRequest(getLoggedInUserID(), id);
+        return responseOK();
+    }
+
+    @RequestMapping(value = "/discard/{id}",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON)
+    public Response discardRequest(long id) {
+        ringServiceHelper.discardRequest(getLoggedInUserID(), id);
         return responseOK();
     }
 

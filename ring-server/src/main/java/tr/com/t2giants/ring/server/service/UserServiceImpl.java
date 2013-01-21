@@ -46,20 +46,12 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userServiceHelper.updateUser(getLoggedInUserID(), user);
     }
 
-    @RequestMapping(value = "/get/by-id/{id}",
+    @RequestMapping(value = "/get/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
     public @ResponseBody
     User getUser(@PathVariable("id") long id) {
-        return userServiceHelper.getUser(id);
-    }
-
-    @RequestMapping(value = "/get/by-username/{username}",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON)
-    public @ResponseBody
-    User getUser(@PathVariable("username") String username) {
-        return userServiceHelper.getUser(username);
+        return userServiceHelper.checkUser(id);
     }
 
     @RequestMapping(value = "/avatar",

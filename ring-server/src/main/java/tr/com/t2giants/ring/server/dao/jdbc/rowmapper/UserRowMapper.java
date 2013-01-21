@@ -2,7 +2,6 @@ package tr.com.t2giants.ring.server.dao.jdbc.rowmapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-
 import tr.com.t2giants.ring.server.domain.User;
 
 import java.sql.ResultSet;

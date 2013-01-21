@@ -4,12 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.server.cache.RingCacheManager;
 import tr.com.t2giants.ring.server.dao.UserDao;
 import tr.com.t2giants.ring.server.domain.User;
 import tr.com.t2giants.ring.server.domain.enums.StreamType;
 import tr.com.t2giants.ring.server.domain.validator.UserValidator;
 import tr.com.t2giants.ring.server.domain.validator.ValidationList;
+import tr.com.t2giants.ring.server.exception.RingProjectNotFoundException;
 import tr.com.t2giants.ring.server.exception.RingProjectValidationException;
+import tr.com.t2giants.ring.server.util.ErrorMessages;
 import tr.com.t2giants.ring.server.util.WebDesignParameters;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 public class UserServiceHelperImpl implements UserServiceHelper {
+
+    @Autowired
+    private RingCacheManager ringCacheManager;
 
     @Autowired
     private UserDao userDao;
@@ -47,6 +53,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         user.setId(id);
         user.setPassword(null);
 
+        ringCacheManager.addUserToCache(user);
         return user;
     }
 
@@ -81,6 +88,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         final String[] avatars = streamServiceHelper.uploadStreamRequest(request, userID, StreamType.AVATAR);
 
         userDao.setAvatarURL(userID, avatars);
+        ringCacheManager.updateUserAvatar(userID, avatars);
         return null;
     }
 
@@ -94,14 +102,16 @@ public class UserServiceHelperImpl implements UserServiceHelper {
         return userDao.isEmailAvailable(email, id);
     }
 
-    @Override
-    public User getUser(long id) {
-        return userDao.getUser(id);
-    }
-
-    @Override
-    public User getUser(String username) {
-        return userDao.getUser(username);
+    public User checkUser(long id) {
+        User user = ringCacheManager.getUserFromCache(id);
+        if (user == null) {
+            user = userDao.getUser(id);
+            if (user == null) {
+                throw new RingProjectNotFoundException(ErrorMessages.CANNOT_FIND_USER.getErrorMessage());
+            }
+            ringCacheManager.addUserToCache(user);
+        }
+        return user;
     }
 
     @Override

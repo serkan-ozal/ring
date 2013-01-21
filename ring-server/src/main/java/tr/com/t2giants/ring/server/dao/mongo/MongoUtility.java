@@ -1,6 +1,7 @@
 package tr.com.t2giants.ring.server.dao.mongo;
 
 import tr.com.t2giants.ring.core.domain.RingItem;
+import tr.com.t2giants.ring.core.domain.RingUserLastPosition;
 
 import java.util.List;
 
@@ -10,11 +11,9 @@ import java.util.List;
  */
 public interface MongoUtility {
 
-    void addRingItem(RingItem ringItem);
+    void addLastPosition(RingItem funItem);
 
-    void removeRingItem(String id);
+    RingUserLastPosition addLastPosition(long id);
 
-    List<RingItem> getRingItemsByBound(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon);
-
-    RingItem getRingItem(String id);
+    List<RingUserLastPosition> getNearByUsers(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon);
 }

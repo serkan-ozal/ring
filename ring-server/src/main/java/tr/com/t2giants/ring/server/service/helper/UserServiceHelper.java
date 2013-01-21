@@ -20,9 +20,7 @@ public interface UserServiceHelper {
 
     Boolean isEmailAvailable(String email, Long id);
 
-    User getUser(long id);
-
-    User getUser(String username);
+    User checkUser(long id);
 
     String getAvatarThumb(long id);
 

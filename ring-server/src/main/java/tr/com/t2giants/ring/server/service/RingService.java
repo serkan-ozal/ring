@@ -13,7 +13,13 @@ import java.util.List;
 public interface RingService {
 
     @Secured("ROLE_USER")
-    Response addToRing(long id);
+    Response requestToAddToRing(long id);
+
+    @Secured("ROLE_USER")
+    Response acceptRequest(long id);
+
+    @Secured("ROLE_USER")
+    Response discardRequest(long id);
 
     @Secured("ROLE_USER")
     Response removeFromRing(long id);

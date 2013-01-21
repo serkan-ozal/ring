@@ -25,9 +25,6 @@ public interface UserService {
     User getUser(long id);
 
     @Secured("ROLE_USER")
-    User getUser(String username);
-
-    @Secured("ROLE_USER")
     String addUpdateAvatar(HttpServletRequest request);
 
     Boolean isUserNameAvailable(String username);

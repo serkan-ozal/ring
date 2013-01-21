@@ -1,7 +1,7 @@
 package tr.com.t2giants.ring.core.domain;
 
 /**
- * User: soner
+ * User: sonic
  * Date: 1/17/13
  */
 public class Coordinates {
