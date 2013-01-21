@@ -1,5 +1,6 @@
 package tr.com.t2giants.ring.server.service.helper;
 
+import com.google.android.gcm.server.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.com.t2giants.ring.server.dao.RingDao;
@@ -16,6 +17,9 @@ import java.util.List;
 public class RingServiceHelperImpl implements RingServiceHelper {
 
     @Autowired
+    private PushServiceHelper pushServiceHelper;
+
+    @Autowired
     private RingDao ringDao;
 
     @Autowired
@@ -24,12 +28,35 @@ public class RingServiceHelperImpl implements RingServiceHelper {
     @Override
     public void requestToAddToRing(long loggedInUserID, long id) {
         userServiceHelper.checkUser(id);
+        final User user = userServiceHelper.checkUser(loggedInUserID);
+
+        final Message message = new Message.Builder()
+                .addData("type", "new_friend_request")
+                .addData("from_username", user.getUsername())
+                .addData("from_user_id", String.valueOf(user.getId()))
+                .addData("full_name", user.getFullName())
+                .addData("avatar", user.getAvatarImage())
+                .addData("avatar_thumb", user.getAvatarThumbnail()).build();
+
+        pushServiceHelper.informUser(loggedInUserID, message);
+
         ringDao.requestToAddToRing(loggedInUserID, id);
     }
 
     @Override
     public void acceptRequest(Long loggedInUserID, long id) {
-        userServiceHelper.checkUser(id);
+        final User user = userServiceHelper.checkUser(id);
+
+        final Message message = new Message.Builder()
+                .addData("type", "request_accepted")
+                .addData("from_username", user.getUsername())
+                .addData("from_user_id", String.valueOf(user.getId()))
+                .addData("full_name", user.getFullName())
+                .addData("avatar", user.getAvatarImage())
+                .addData("avatar_thumb", user.getAvatarThumbnail()).build();
+
+        pushServiceHelper.informUser(id, message);
+
         ringDao.acceptRequest(loggedInUserID, id);
     }
 

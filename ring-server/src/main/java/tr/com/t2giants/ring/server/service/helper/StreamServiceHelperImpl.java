@@ -9,7 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import tr.com.t2giants.ring.server.domain.enums.StreamType;
 import tr.com.t2giants.ring.server.exception.RingProjectNotAcceptableException;
 import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;

@@ -1,8 +1,8 @@
 package tr.com.t2giants.ring.server.service.helper;
 
-import javax.servlet.http.HttpServletRequest;
-
 import tr.com.t2giants.ring.server.domain.User;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User: sonic

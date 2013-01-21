@@ -39,6 +39,7 @@ public class UserServiceHelperImpl implements UserServiceHelper {
 
     @Autowired
     private UserValidator userValidator;
+
     @Override
     public User addUser(User user) {
 

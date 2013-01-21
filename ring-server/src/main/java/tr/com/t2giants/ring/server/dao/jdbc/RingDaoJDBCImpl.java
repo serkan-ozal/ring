@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import tr.com.t2giants.ring.core.domain.Friendship;
 import tr.com.t2giants.ring.server.dao.RingDao;
-import tr.com.t2giants.ring.server.domain.User;
 import tr.com.t2giants.ring.server.exception.RingProjectRuntimeException;
 import tr.com.t2giants.ring.server.util.ErrorMessages;
 
