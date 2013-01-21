@@ -5,6 +5,7 @@ import org.springframework.security.access.annotation.Secured;
 import tr.com.t2giants.ring.server.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 
 /**
  * User: sonic
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 public interface UserService {
 
     User addUser(User user);
+
+    @Secured("ROLE_USER")
+    Response deactivateUser();
 
     @Secured("ROLE_USER")
     User updateUser(User user);

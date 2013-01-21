@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import tr.com.t2giants.ring.core.domain.Coordinates;
 
 /**
- * User: soner
+ * User: sonic
  * Date: 1/15/13
  */
 @Service

@@ -204,6 +204,7 @@
 
     <bean id="funItemsMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg>
+            <!--suppress InjectionValueTypeInspection -->
             <ref bean="mongo"/>
         </constructor-arg>
         <constructor-arg value="ring"/>

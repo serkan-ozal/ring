@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * User: sonic
@@ -30,6 +31,11 @@ public class UserServiceImpl extends BaseService implements UserService {
     public @ResponseBody
     User addUser(@RequestBody User user) {
         return userServiceHelper.addUser(user);
+    }
+
+    @Override
+    public Response deactivateUser() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @RequestMapping(value = "/update",
@@ -72,7 +78,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userServiceHelper.isUsernameAvailable(username, getLoggedInUserID());
     }
 
-    @RequestMapping(value = "/check/username/{username}",
+    @RequestMapping(value = "/check/email",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON)
     public @ResponseBody

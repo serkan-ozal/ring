@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * User: soner
+ * User: sonic
  * Date: 1/15/13
  */
 @RunWith(MockitoJUnitRunner.class)

@@ -5,7 +5,7 @@ import tr.com.t2giants.ring.server.domain.enums.StreamType;
 import java.io.InputStream;
 
 /**
- * User: soner
+ * User: sonic
  * Date: 1/15/13
  */
 public interface AWSService {
