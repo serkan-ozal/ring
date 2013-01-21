@@ -8,6 +8,7 @@ public class RingUserLastPosition {
 
     protected String id;
     protected Coordinates lastPosition;
+    protected long userID;
 
     public String getId() {
         return id;
@@ -23,5 +24,13 @@ public class RingUserLastPosition {
 
     public void setLastPosition(Coordinates lastPosition) {
         this.lastPosition = lastPosition;
+    }
+
+    public long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(long userID) {
+        this.userID = userID;
     }
 }

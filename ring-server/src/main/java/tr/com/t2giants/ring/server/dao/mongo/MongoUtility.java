@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface MongoUtility {
 
-    void addLastPosition(RingItem funItem);
+    void addLastPosition(RingUserLastPosition ringUserLastPosition);
 
-    RingUserLastPosition addLastPosition(long id);
+    RingUserLastPosition getLastPosition(long id);
 
     List<RingUserLastPosition> getNearByUsers(Double topLeftLat, Double topLeftLon, Double bottomRightLat, Double bottomRightLon);
 }

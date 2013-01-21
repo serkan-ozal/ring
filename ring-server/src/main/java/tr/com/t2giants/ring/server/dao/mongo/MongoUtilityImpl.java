@@ -39,12 +39,12 @@ public class MongoUtilityImpl implements MongoUtility {
     }
 
     @Override
-    public void addLastPosition(RingItem funItem) {
-        mongoTemplate.insert(funItem);
+    public void addLastPosition(RingUserLastPosition ringUserLastPosition) {
+        mongoTemplate.insert(ringUserLastPosition);
     }
 
     @Override
-    public RingUserLastPosition addLastPosition(long id) {
+    public RingUserLastPosition getLastPosition(long id) {
         return mongoTemplate.findOne(query(where("id").is(id)), RingUserLastPosition.class);
     }
 
