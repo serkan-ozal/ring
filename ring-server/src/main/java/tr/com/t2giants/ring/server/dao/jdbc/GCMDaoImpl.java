@@ -44,9 +44,9 @@ public class GCMDaoImpl extends BaseDaoJDBC implements GCMDao {
     }
 
     @Override
-    public List getRegistrationID(long userID) {
+    public String getGCMRegID(long userID) {
         try {
-            return getJDBCTemplate().queryForList("SELECT gcmRegID FROM "
+            return getJDBCTemplate().queryForObject("SELECT gcmRegID FROM "
                     + tableNameGCM + " WHERE userID = ?",
                     String.class,
                     userID);

@@ -162,7 +162,7 @@
         <property name="host" value="smtp.gmail.com"/>
         <property name="port" value="587"/>
         <property name="username" value="ida4Clubs@gmail.com"/>
-        <property name="password" value="ida4Clubs!"/>
+        <property name="password" value="ida4Clubs!**"/>
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.debug">false</prop>

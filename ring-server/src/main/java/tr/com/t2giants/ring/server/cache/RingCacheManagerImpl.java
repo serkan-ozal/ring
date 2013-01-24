@@ -19,9 +19,16 @@ public class RingCacheManagerImpl implements RingCacheManager {
 
     private final String USER_ID_PREFIX = "user-id-";
 
+    private final String USER_GCM_REG_ID_PREFIX = "user-gcm-reg-id-";
+
     @Override
     public void addUserToCache(User user) {
         memCachedClient.add(USER_ID_PREFIX + user.getId(), user);
+    }
+
+    @Override
+    public void addGCMRegIDToCache(long userID, String gcmRegID) {
+        memCachedClient.add(USER_GCM_REG_ID_PREFIX + userID, gcmRegID);
     }
 
     @Override
@@ -42,5 +49,10 @@ public class RingCacheManagerImpl implements RingCacheManager {
     @Override
     public User getUserFromCache(long id) {
         return (User) memCachedClient.get(USER_ID_PREFIX + id);
+    }
+
+    @Override
+    public String getGCMRegIDFromCache(long id) {
+        return (String) memCachedClient.get(USER_GCM_REG_ID_PREFIX + id);
     }
 }

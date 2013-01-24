@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tr.com.t2giants.ring.server.cache.RingCacheManager;
 import tr.com.t2giants.ring.server.dao.GCMDao;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,9 @@ public class PushServiceHelperImpl implements PushServiceHelper {
     protected final Log logger = LogFactory.getLog(PushServiceHelperImpl.class);
 
     @Autowired
+    private RingCacheManager ringCacheManager;
+
+    @Autowired
     private GCMDao gcmDao;
 
     private Sender sender;
@@ -38,18 +42,17 @@ public class PushServiceHelperImpl implements PushServiceHelper {
     }
 
     @Override
-    public void addUserRegistrationID(long userID, String regID) {
-        gcmDao.addRegistrationID(userID, regID);
+    public void addUserRegistrationID(long userID, String gcmRegID) {
+        gcmDao.addRegistrationID(userID, gcmRegID);
+        ringCacheManager.addGCMRegIDToCache(userID, gcmRegID);
     }
 
     @Override
     public void informUser(long userID, Message message) {
-        List<String> gcmRegIDs = gcmDao.getRegistrationID(userID);
+        String gcmRegID = checkGCMRegID(userID);
 
         try {
-            for (String gcmRegID : gcmRegIDs) {
-                pushMessageTo(userID, gcmRegID, message);
-            }
+            pushMessageTo(userID, gcmRegID, message);
         } catch (IOException e) {
             logger.error("Exception during pushing message to user with id: " + userID + " with message" + message.toString(), e);
         }
@@ -71,5 +74,17 @@ public class PushServiceHelperImpl implements PushServiceHelper {
                 gcmDao.removeUserGCMRegID(userID, gcmRegID);
             }
         }
+    }
+
+    private String checkGCMRegID(long id) {
+        String gcmRegIDFromCache = ringCacheManager.getGCMRegIDFromCache(id);
+        if (gcmRegIDFromCache == null) {
+            gcmRegIDFromCache = gcmDao.getGCMRegID(id);
+            if (gcmRegIDFromCache == null){
+                return null;
+            }
+            ringCacheManager.addGCMRegIDToCache(id, gcmRegIDFromCache);
+        }
+        return gcmRegIDFromCache;
     }
 }

@@ -10,9 +10,13 @@ public interface RingCacheManager {
 
     void addUserToCache(User user);
 
+    void addGCMRegIDToCache(long userID, String gcmRegID);
+
     void removeUserFromCache(long id);
 
     void updateUserAvatar(long id, String[] avatars);
 
     User getUserFromCache(long id);
+
+    String getGCMRegIDFromCache(long id);
 }

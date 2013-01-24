@@ -10,7 +10,7 @@ public interface GCMDao {
 
     void addRegistrationID(long userID, String gcmRegID);
 
-    List getRegistrationID(long userID);
+    String getGCMRegID(long userID);
 
     void removeUserGCMRegID(long userID, String gcmRegID);
 }
