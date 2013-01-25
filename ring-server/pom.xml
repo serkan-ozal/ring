@@ -54,24 +54,16 @@
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>${maven.jetty.plugin.version}</version>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.0.RC4</version>
                 <configuration>
-                    <stopPort>9966</stopPort>
-                    <stopKey>ring-server</stopKey>
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
                     <webAppConfig>
-                        <contextPath>/kamguru-web</contextPath>
-                        <baseResource implementation="org.mortbay.resource.ResourceCollection">
-                            <resourcesAsCSV>src/main/webapp,${project.build.directory}</resourcesAsCSV>
-                        </baseResource>
+                        <contextPath>/</contextPath>
                     </webAppConfig>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>MAVEN_OPTS</name>
-                            <value>-Xms1024m -Xmx2048m</value>
-                        </systemProperty>
-                    </systemProperties>
+                    <webAppSourceDirectory>${basedir}/src/main/webapp</webAppSourceDirectory>
+                    <scanIntervalSeconds>1</scanIntervalSeconds>
+                    <stopPort>9966</stopPort>
+                    <stopKey>foo</stopKey>
                 </configuration>
             </plugin>
         </plugins>
