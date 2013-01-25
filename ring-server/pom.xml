@@ -9,13 +9,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>t2.giants</id>
-            <url>http://10.6.76.52:8081/content/repositories/thirdparty/</url>
-        </repository>
-    </repositories>
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ring-server</artifactId>
     <packaging>war</packaging>
@@ -340,6 +333,12 @@
             <groupId>com.google.android</groupId>
             <artifactId>gcm-server</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
 
     </dependencies>

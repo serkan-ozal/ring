@@ -1,0 +1,1 @@
+gcm-server jar i calistirmadan external dependency olarak ekleyin anam babam
