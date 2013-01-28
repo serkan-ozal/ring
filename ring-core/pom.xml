@@ -13,5 +13,23 @@
   	<artifactId>ring-core</artifactId>
   	<packaging>jar</packaging>
   	<name>Ring Core</name>
+  	
+	<dependencies>
+		    
+			<!-- Jackson dependencies Start -->
+			<dependency>
+	            <groupId>org.codehaus.jackson</groupId>
+	            <artifactId>jackson-mapper-asl</artifactId>
+	            <version>${jackson.version}</version>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>org.codehaus.jackson</groupId>
+	            <artifactId>jackson-core-asl</artifactId>
+	            <version>${jackson.version}</version>
+	        </dependency>
+	        <!-- Jackson dependencies End -->
+	        
+		</dependencies>
 
 </project>
