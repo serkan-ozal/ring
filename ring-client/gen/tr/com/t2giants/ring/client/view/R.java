@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package tr.com.t2giants.androidcompetition;
+package tr.com.t2giants.ring.client.view;
 
 public final class R {
     public static final class attr {
@@ -24,7 +24,8 @@ public final class R {
         public static final int txtUsername=0x7f050001;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int login=0x7f030000;
+        public static final int main=0x7f030001;
     }
     public static final class string {
         public static final int appName=0x7f040000;

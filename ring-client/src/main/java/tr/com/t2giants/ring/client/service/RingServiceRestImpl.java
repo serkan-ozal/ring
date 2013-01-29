@@ -1,20 +1,15 @@
 package tr.com.t2giants.ring.client.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
+import tr.com.t2giants.ring.client.exception.InvalidUsernameOrPasswordException;
+import tr.com.t2giants.ring.client.exception.LoginFailedException;
 import tr.com.t2giants.ring.client.model.LoginRequest;
 import tr.com.t2giants.ring.client.model.LoginResponse;
-import tr.com.t2giants.ring.client.util.JsonUtil;
 import tr.com.t2giants.ring.client.util.RestConstants;
 
 public class RingServiceRestImpl implements RingService, RestConstants {
@@ -24,19 +19,23 @@ public class RingServiceRestImpl implements RingService, RestConstants {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost request = new HttpPost(SERVER_URL + LOGIN_PATH);
-			
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair(USERNAME_PARAMETER, loginRequest.getUsername()));
-			params.add(new BasicNameValuePair(PASSWORD_PARAMETER, loginRequest.getPassword()));
-			request.setEntity(new UrlEncodedFormEntity(params));
-			
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			String responseBody = client.execute(request, responseHandler);
-			return JsonUtil.toObject(responseBody, LoginResponse.class);
+			request.addHeader(REMEMBER_ME_PARAMETER, Boolean.TRUE.toString());
+			request.addHeader(USERNAME_PARAMETER, loginRequest.getUsername());
+			request.addHeader(PASSWORD_PARAMETER, loginRequest.getPassword());
+
+			HttpResponse response = client.execute(request);
+			Header tokenHeader = response.getFirstHeader(TOKEN_PARAMETER);
+			if (tokenHeader != null) {
+				String token = tokenHeader.getValue();
+				if (token != null && token.length() > 0) {
+					return new LoginResponse(token);
+				}
+			}
+			return new LoginResponse(new InvalidUsernameOrPasswordException());
 		}
 		catch (Throwable t) {
 			t.printStackTrace();
-			return new LoginResponse(t);
+			return new LoginResponse(new LoginFailedException(t));
 		}
 	}
 	

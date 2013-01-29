@@ -16,7 +16,6 @@
   	
 	<dependencies>
 		    
-			<!-- Jackson dependencies Start -->
 			<dependency>
 	            <groupId>org.codehaus.jackson</groupId>
 	            <artifactId>jackson-mapper-asl</artifactId>
@@ -28,8 +27,13 @@
 	            <artifactId>jackson-core-asl</artifactId>
 	            <version>${jackson.version}</version>
 	        </dependency>
-	        <!-- Jackson dependencies End -->
 	        
+	        <dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${apache.http.version}</version>
+			</dependency>
+			
 		</dependencies>
 
 </project>
