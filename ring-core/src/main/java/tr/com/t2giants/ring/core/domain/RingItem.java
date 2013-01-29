@@ -1,5 +1,6 @@
 package tr.com.t2giants.ring.core.domain;
 
+@SuppressWarnings("serial")
 public class RingItem extends BaseObject {
 
 	protected User user;

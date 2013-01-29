@@ -70,6 +70,14 @@
 						</archive>
 					</configuration>
 				</plugin>
+				<plugin>
+			        <artifactId>maven-assembly-plugin</artifactId>
+			        <configuration>
+			          	<descriptorRefs>
+			            	<descriptorRef>jar-with-dependencies</descriptorRef>
+			          	</descriptorRefs>
+			        </configuration>
+			     </plugin>   
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -96,11 +104,33 @@
 		</dependencies>
 	</dependencyManagement>
 	
-	<modules>
-		<module>ring-core</module>
-		<module>ring-client</module>
-		<module>ring-server</module>
-	</modules>
+	<profiles>
+     	<profile>
+       		<id>client</id>
+       		<modules>
+				<module>ring-core</module>
+				<module>ring-client</module>
+			</modules>
+       	</profile>
+       	<profile>
+       		<id>server</id>
+       		<modules>
+				<module>ring-core</module>
+				<module>ring-server</module>
+			</modules>
+       	</profile>
+       	<profile>
+       		<id>all</id>
+       		<modules>
+				<module>ring-core</module>
+				<module>ring-client</module>
+				<module>ring-server</module>
+			</modules>
+			<activation>
+		      	<activeByDefault>true</activeByDefault>
+		    </activation>
+       	</profile>
+    </profiles>   	
 	
 	<repositories>
         <repository>

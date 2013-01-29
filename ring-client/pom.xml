@@ -26,11 +26,12 @@
             <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-			<groupId>tr.com.t2giants</groupId>
-			<artifactId>ring-core</artifactId>
-		</dependency>
-    </dependencies>
+         <dependency>
+            <groupId>tr.com.t2giants</groupId>
+            <artifactId>ring-core</artifactId>
+            <scope>compile</scope> 
+        </dependency>
+  	</dependencies>
 
     <build>
         <plugins>

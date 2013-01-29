@@ -1,0 +1,1 @@
+mvn -P server clean install
