@@ -72,8 +72,7 @@
         <dependency>
             <groupId>tr.com.t2giants</groupId>
             <artifactId>ring-core</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/../ring-core/target/ring-core-${app.version}.jar</systemPath>
+            <version>${app.version}</version>
         </dependency>
 
         <dependency>
