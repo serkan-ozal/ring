@@ -1,5 +1,6 @@
 package tr.com.t2giants.ring.client.view;
 
+import tr.com.t2giants.ring.client.view.friendship.FriendshipActivity;
 import tr.com.t2giants.ring.client.view.login.LoginActivity;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +17,7 @@ public class RingMainActivity extends Activity {
 		Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
         // TODO Check cookie for auto login
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, FriendshipActivity.class));
     }
 
 }

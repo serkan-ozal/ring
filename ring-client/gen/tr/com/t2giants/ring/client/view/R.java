@@ -14,7 +14,11 @@ public final class R {
         public static final int clear=0x7f020000;
         public static final int icon=0x7f020001;
         public static final int login=0x7f020002;
-        public static final int ring=0x7f020003;
+        public static final int login_failed_128x128=0x7f020003;
+        public static final int login_failed_16x16=0x7f020004;
+        public static final int login_failed_32x32=0x7f020005;
+        public static final int login_failed_64x64=0x7f020006;
+        public static final int ring=0x7f020007;
     }
     public static final class id {
         public static final int btnClear=0x7f050003;
@@ -24,8 +28,9 @@ public final class R {
         public static final int txtUsername=0x7f050001;
     }
     public static final class layout {
-        public static final int login=0x7f030000;
-        public static final int main=0x7f030001;
+        public static final int friendship=0x7f030000;
+        public static final int login=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class string {
         public static final int appName=0x7f040000;
