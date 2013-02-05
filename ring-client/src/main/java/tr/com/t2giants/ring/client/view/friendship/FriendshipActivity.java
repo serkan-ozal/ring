@@ -2,6 +2,8 @@ package tr.com.t2giants.ring.client.view.friendship;
 
 import tr.com.t2giants.ring.client.view.BaseRingActivity;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,7 +19,8 @@ public class FriendshipActivity extends BaseRingActivity {
 		Log.i(TAG, "onCreate");
 		
 		setTitle("Friendship Monitor");
-		friendshipMonitoringView = new FriendshipMonitoringView(this);
+		friendshipMonitoringView = 
+				new FriendshipMonitoringView((LocationManager)getSystemService(Context.LOCATION_SERVICE), this);
         setContentView(friendshipMonitoringView);
     }
     
