@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -89,10 +90,20 @@ public class FriendshipMonitoringView extends View implements LocationListener {
 		
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this); 
 		
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setCostAllowed(false);
+
+		String providerName = locationManager.getBestProvider(criteria, true);
+
+		Location location = locationManager.getLastKnownLocation(providerName);
+		if (location != null) {
+			Log.i("FriendShipMonitoringView", location.getLatitude() + ", " + location.getLongitude());
+		}	
+		
 		timer.schedule(
 			new TimerTask() {
 	            public void run() {
-	            	Log.i("FriendShipMonitoringView", "View update task is running ...");
 	                FriendshipMonitoringView.this.postInvalidate();
 	            }
 			}, 
@@ -123,6 +134,7 @@ public class FriendshipMonitoringView extends View implements LocationListener {
 				GeoLocationDistance distance = 
 						RingClientUtil.findGeolocationDistance(latitude, longitude, 
 								friendship.getLatitude(), friendship.getLongitude());
+				Log.i(getClass().getSimpleName(), distance.getHorizontalDistanceInMeters() + ", " + distance.getVerticalDistanceInMeters());
 				int x = centerX + (int)(distance.getHorizontalDistanceInMeters() * radarRadius / 
 										FRIENDSHIP_RADAR_LIMIT_IN_METERS);
 				int y = centerY + (int)(distance.getVerticalDistanceInMeters() * radarRadius / 
@@ -148,14 +160,14 @@ public class FriendshipMonitoringView extends View implements LocationListener {
 		if (friendshipPaint == null) {
 			return;
 		}
-		canvas.drawCircle(centerX, centerY, FRIENDSHIP_POINT_RADIUS, friendshipPaint);
+		canvas.drawCircle(x, y, FRIENDSHIP_POINT_RADIUS, friendshipPaint);
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		latitude = location.getLatitude();
 		longitude = location.getLongitude();
-		Log.i("FriendshipMonitoringView", "Location: " + latitude + ", " + longitude);
+		Log.i(getClass().getSimpleName(), "Location changed: " + latitude + ", " + longitude);
 	}
 
 	@Override

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="tr.com.t2giants.ring.client.view" android:versionCode="1" android:versionName="0.0.1-SNAPSHOT">
+<manifest 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+  	package="tr.com.t2giants.ring.client.view" 
+  	android:versionCode="1" 
+  	android:versionName="0.0.1-SNAPSHOT">
 
   	<application android:icon="@drawable/icon" android:label="@string/appName">
+		<uses-library android:name="com.google.android.maps" /> 
 	    <activity android:name="tr.com.t2giants.ring.client.view.RingMainActivity">
 	      	<intent-filter>
 	        	<action android:name="android.intent.action.MAIN" />

@@ -6,6 +6,16 @@ public class Friendship {
 	private double longitude;
 	private FriendshipType friendshipType;
 	
+	public Friendship() {
+		
+	}
+	
+	public Friendship(double latitude, double longitude, FriendshipType friendshipType) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.friendshipType = friendshipType;
+	}
+	
 	public double getLatitude() {
 		return latitude;
 	}

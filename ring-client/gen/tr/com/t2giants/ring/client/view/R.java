@@ -21,11 +21,12 @@ public final class R {
         public static final int ring=0x7f020007;
     }
     public static final class id {
-        public static final int btnClear=0x7f050003;
-        public static final int btnSend=0x7f050004;
-        public static final int tableLayout=0x7f050000;
-        public static final int txtPassword=0x7f050002;
-        public static final int txtUsername=0x7f050001;
+        public static final int btnClear=0x7f050004;
+        public static final int btnSend=0x7f050005;
+        public static final int mapView=0x7f050000;
+        public static final int tableLayout=0x7f050001;
+        public static final int txtPassword=0x7f050003;
+        public static final int txtUsername=0x7f050002;
     }
     public static final class layout {
         public static final int friendship=0x7f030000;

@@ -1,6 +1,7 @@
 package tr.com.t2giants.ring.client.view.util;
 
 import android.location.Location;
+
 import tr.com.t2giants.ring.client.model.GeoLocationDistance;
 
 public class RingClientUtil {
