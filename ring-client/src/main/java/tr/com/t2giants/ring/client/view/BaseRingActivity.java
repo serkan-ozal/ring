@@ -6,6 +6,8 @@ import tr.com.t2giants.ring.client.service.RingServiceRestImpl;
 
 public abstract class BaseRingActivity extends Activity {
 
+	protected final String TAG = getClass().getSimpleName();
+	
 	protected RingService ringService = new RingServiceRestImpl();
 	
 }

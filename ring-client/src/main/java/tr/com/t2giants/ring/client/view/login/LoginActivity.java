@@ -4,7 +4,7 @@ import tr.com.t2giants.ring.client.model.LoginRequest;
 import tr.com.t2giants.ring.client.model.LoginResponse;
 import tr.com.t2giants.ring.client.view.BaseRingActivity;
 import tr.com.t2giants.ring.client.view.R;
-import tr.com.t2giants.ring.client.view.friendship.FriendshipActivity;
+import tr.com.t2giants.ring.client.view.friendship.FriendshipMapActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class LoginActivity extends BaseRingActivity {
-
-    private static String TAG = "ring-login";
 
     private TextView txtUsername;
     private TextView txtPassword;
@@ -101,7 +99,7 @@ public class LoginActivity extends BaseRingActivity {
     	LoginResponse response = ringService.login(new LoginRequest(username, password));
     	if (response.isSuccessful()) {
     		// TODO After login, user may be redirected to another activity
-            startActivity(new Intent(this, FriendshipActivity.class));
+            startActivity(new Intent(this, FriendshipMapActivity.class));
     	}
     	else {
     		AlertDialog ad = 

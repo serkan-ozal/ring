@@ -5,34 +5,28 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.android.maps.MapActivity;
-
 import tr.com.t2giants.ring.client.model.Friendship;
 import tr.com.t2giants.ring.client.model.FriendshipType;
 import tr.com.t2giants.ring.client.view.BaseRingActivity;
-import tr.com.t2giants.ring.client.view.R;
 
 import android.content.Context;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-public class FriendshipActivity extends MapActivity {
+public class FriendshipRadarActivity extends BaseRingActivity {
 
-    private static String TAG = "ring-friendship";
-    
     private FriendshipMonitoringView friendshipMonitoringView;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
-		
-		/*
+
 		setTitle("Friendship Monitor");
 		friendshipMonitoringView = 
 				new FriendshipMonitoringView((LocationManager)getSystemService(Context.LOCATION_SERVICE), this);
-        
+
         new Timer().
         	schedule(
     			new TimerTask() {
@@ -41,8 +35,6 @@ public class FriendshipActivity extends MapActivity {
     	            }
     			}, 
     			10000, 1000);
-        */
-        setContentView(R.layout.friendship);
     }
     
     private List<Friendship> generateRandomFriendshipList() {
@@ -59,9 +51,4 @@ public class FriendshipActivity extends MapActivity {
     	return friendshipList;
     }
 
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
-    
 }
