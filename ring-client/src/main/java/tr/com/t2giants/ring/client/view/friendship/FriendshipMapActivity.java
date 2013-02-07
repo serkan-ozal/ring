@@ -19,7 +19,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,12 +33,41 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 
     private final String TAG = getClass().getSimpleName();
     
+    private final static int HEADER_HEIGHT = 50;
+    @SuppressWarnings("unused")
+	private final static int HEADER_ICON_HEIGHT = 50;
+    private final static int HEADER_ICON_WIDTH = 88;
+    
+    @SuppressWarnings("unused")
+	private final static int FOOTER_HEIGHT = 50;
+    private final static int FOOTER_ICON_HEIGHT = 50;
+    private final static int FOOTER_ICON_WIDTH = 72;
+    
+    private final Paint HEADER_PAINT = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_PAINT_1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_PAINT_2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    
     private LocationManager locationManager;
     private Location currentLocation;
     
     private MapView mapView;
     private MapController mapController;
     private List<Friendship> friendshipList = new ArrayList<Friendship>();
+    
+    public FriendshipMapActivity() {
+    	init();
+    }
+    
+    private void init() {
+    	HEADER_PAINT.setColor(0xFFFA3857);
+    	HEADER_PAINT.setStyle(Style.FILL);
+    	
+    	FOOTER_PAINT_1.setColor(0xFFFA3857);
+    	FOOTER_PAINT_1.setStyle(Style.FILL);
+    	
+    	FOOTER_PAINT_2.setColor(0xFFCD2943);
+    	FOOTER_PAINT_2.setStyle(Style.FILL);
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,8 +93,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		            		new Runnable() {
 								@Override
 								public void run() {
-									Log.i(TAG, "invalidate");
-									drawLocations();
+									drawView();
 								}
 		            		});
 		            }
@@ -86,18 +117,27 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 
 	@Override
 	public void onLocationChanged(Location location) {
+		if (currentLocation == null) {
+			GeoPoint point = 
+				new GeoPoint(
+			          (int) (location.getLatitude() * 1E6), 
+			          (int) (location.getLongitude() * 1E6));
+			mapController.animateTo(point);
+			mapController.setZoom(20);
+		}
 		currentLocation = location;
-		drawLocations();
+		drawView();
 	}
 	
-	private void drawLocations() {
+	private void drawView() {
+		List<Overlay> listOfOverlays = mapView.getOverlays();
+		listOfOverlays.clear();
+
 		if (currentLocation != null) {
-			GeoPoint point = new GeoPoint(
+			GeoPoint point = 
+				new GeoPoint(
 			          (int) (currentLocation.getLatitude() * 1E6), 
 			          (int) (currentLocation.getLongitude() * 1E6));
-
-			List<Overlay> listOfOverlays = mapView.getOverlays();
-			listOfOverlays.clear();
 			
 			CurrentLocationOverlay currentLocationOverlay = new CurrentLocationOverlay();
 			currentLocationOverlay.setPointToDraw(point);
@@ -112,11 +152,12 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 				friendshipLocationOverlay.setPointToDraw(friendshipLocationPoint);
 				listOfOverlays.add(friendshipLocationOverlay);
 			}
-			
-			mapController.animateTo(point);
-			mapController.setZoom(20);
-			mapView.invalidate();
 		}
+		
+		listOfOverlays.add(new HeaderOverlay());
+		listOfOverlays.add(new FooterOverlay());
+
+		mapView.invalidate();
 	}
 
 	@Override
@@ -154,7 +195,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		    mapView.getProjection().toPixels(pointToDraw, screenPts);
 
 		    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.current_location);
-		    canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 24, null);    
+		    canvas.drawBitmap(bmp, screenPts.x - (bmp.getWidth() / 2), screenPts.y - (bmp.getHeight() / 2), null);    
 		    
 		    return true;
 		}
@@ -212,9 +253,46 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		    mapView.getProjection().toPixels(pointToDraw, screenPts);
 
 		    Bitmap bmp = BitmapFactory.decodeResource(getResources(), drawableId);
-		    canvas.drawBitmap(bmp, screenPts.x, screenPts.y, null);    	
+		    canvas.drawBitmap(bmp, screenPts.x - (bmp.getWidth() / 2), screenPts.y - (bmp.getHeight() / 2), null);      	
 		    
 		    return true;
+		}
+		
+	}
+	
+	public class HeaderOverlay extends Overlay {
+		
+		@Override
+		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
+			canvas.drawRect(0, 0, mapView.getWidth(), HEADER_HEIGHT, HEADER_PAINT);
+			Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ring_header);
+		    canvas.drawBitmap(bmp, (mapView.getWidth() - HEADER_ICON_WIDTH) / 2 , 0, null);    
+			return true;
+		}
+		
+	}
+	
+	public class FooterOverlay extends Overlay {
+		
+		@Override
+		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
+			RectF oval1 = new RectF();
+			oval1.set(	-500 + (mapView.getWidth() / 2), 
+						mapView.getHeight() - FOOTER_ICON_HEIGHT - 20 - 40, 
+						+500 + (mapView.getWidth() / 2), 
+						mapView.getHeight() - FOOTER_ICON_HEIGHT + 1000 - 40);
+			canvas.drawArc(oval1, 0, 360, true, FOOTER_PAINT_1);
+			
+			RectF oval2 = new RectF();
+			oval2.set(	-500 + (mapView.getWidth() / 2), 
+						mapView.getHeight() - FOOTER_ICON_HEIGHT - 20, 
+						+500 + (mapView.getWidth() / 2), 
+						mapView.getHeight() - FOOTER_ICON_HEIGHT + 1000);
+			canvas.drawArc(oval2, 0, 360, true, FOOTER_PAINT_2);
+			
+			Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ring_footer);
+		    canvas.drawBitmap(bmp, (mapView.getWidth() - FOOTER_ICON_WIDTH) / 2 , mapView.getHeight() - FOOTER_ICON_HEIGHT, null);    
+			return true;
 		}
 		
 	}
