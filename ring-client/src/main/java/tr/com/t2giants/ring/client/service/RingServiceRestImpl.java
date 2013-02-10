@@ -1,5 +1,8 @@
 package tr.com.t2giants.ring.client.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -8,11 +11,25 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import tr.com.t2giants.ring.client.exception.InvalidUsernameOrPasswordException;
 import tr.com.t2giants.ring.client.exception.LoginFailedException;
+import tr.com.t2giants.ring.client.model.Friendship;
+import tr.com.t2giants.ring.client.model.FriendshipType;
 import tr.com.t2giants.ring.client.model.LoginRequest;
 import tr.com.t2giants.ring.client.model.LoginResponse;
 import tr.com.t2giants.ring.client.util.RestConstants;
 
 public class RingServiceRestImpl implements RingService, RestConstants {
+	
+	private static RingService ringService = new RingServiceRestImpl();
+	
+	private String authenticationToken;
+	
+	private RingServiceRestImpl() {
+		
+	}
+	
+	public static RingService getRingService() {
+		return ringService;
+	}
 	
 	@Override
 	public LoginResponse login(LoginRequest loginRequest) {
@@ -26,9 +43,9 @@ public class RingServiceRestImpl implements RingService, RestConstants {
 			HttpResponse response = client.execute(request);
 			Header tokenHeader = response.getFirstHeader(TOKEN_PARAMETER);
 			if (tokenHeader != null) {
-				String token = tokenHeader.getValue();
-				if (token != null && token.length() > 0) {
-					return new LoginResponse(token);
+				authenticationToken = tokenHeader.getValue();
+				if (authenticationToken != null && authenticationToken.length() > 0) {
+					return new LoginResponse(authenticationToken);
 				}
 			}
 			return new LoginResponse(new InvalidUsernameOrPasswordException());
@@ -43,6 +60,19 @@ public class RingServiceRestImpl implements RingService, RestConstants {
 		RingService ringService = new RingServiceRestImpl();
 		LoginResponse loginResponse = ringService.login(new LoginRequest("abc", "admin"));
 		System.out.println(loginResponse.getToken());
+	}
+
+	@Override
+	public List<Friendship> getFriendships() {
+		List<Friendship> friendshipList = new ArrayList<Friendship>();
+		for (int i = 0; i < 5; i++) {
+			friendshipList.add(
+				new Friendship(
+						39.865776 + (0.0001 * Math.random() * 5), //0.0001 10m difference
+						32.824917 + (0.0001 * Math.random() * 5), //0.0001 10m difference
+						FriendshipType.values()[(int)(Math.random() * 3)]));
+		}
+		return friendshipList;
 	}
 
 }

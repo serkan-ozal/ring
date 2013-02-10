@@ -8,6 +8,6 @@ public abstract class BaseRingActivity extends Activity {
 
 	protected final String TAG = getClass().getSimpleName();
 	
-	protected RingService ringService = new RingServiceRestImpl();
+	protected RingService ringService = RingServiceRestImpl.getRingService();
 	
 }

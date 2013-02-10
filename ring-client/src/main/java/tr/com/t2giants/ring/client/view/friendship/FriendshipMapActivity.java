@@ -9,20 +9,28 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 
 import tr.com.t2giants.ring.client.model.Friendship;
-import tr.com.t2giants.ring.client.model.FriendshipType;
+import tr.com.t2giants.ring.client.service.RingService;
+import tr.com.t2giants.ring.client.service.RingServiceRestImpl;
 import tr.com.t2giants.ring.client.view.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader.TileMode;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +40,9 @@ import android.util.Log;
 public class FriendshipMapActivity extends MapActivity implements LocationListener {
 
     private final String TAG = getClass().getSimpleName();
+    
+    private final static int REFRESH_INITIAL_DELAY_TIME = 1 * 1000; // 1 second
+    private final static int REFRESH_PERIOD_IN_MSEC = 10 * 1000; // 10 seconds
     
     private final static int HEADER_HEIGHT = 50;
     @SuppressWarnings("unused")
@@ -49,10 +60,13 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     
     private LocationManager locationManager;
     private Location currentLocation;
+    private MyLocationOverlay myLocationOverlay;
     
     private MapView mapView;
     private MapController mapController;
     private List<Friendship> friendshipList = new ArrayList<Friendship>();
+    
+    private RingService ringService = RingServiceRestImpl.getRingService();
     
     public FriendshipMapActivity() {
     	init();
@@ -81,6 +95,9 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		
 		mapView = (MapView) findViewById(R.id.mapView);
 		mapController = mapView.getController();
+		myLocationOverlay = new MyLocationOverlay(this, mapView);
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.enableCompass();
 		
 		mapView.setBuiltInZoomControls(true);
 		mapController.setZoom(20);
@@ -93,26 +110,22 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		            		new Runnable() {
 								@Override
 								public void run() {
-									drawView();
+									refreshView();
 								}
 		            		});
 		            }
 				}, 
-				1000, 1000);
-		
-		new Timer().
-	    	schedule(
-				new TimerTask() {
-		            public void run() {
-		            	generateRandomFriendshipList();
-		            }
-				}, 
-				10000, 1000);
+				REFRESH_INITIAL_DELAY_TIME, REFRESH_PERIOD_IN_MSEC);
     }
 
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	private void refreshView() {
+		friendshipList = ringService.getFriendships();
+		drawView();
 	}
 
 	@Override
@@ -126,23 +139,14 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			mapController.setZoom(20);
 		}
 		currentLocation = location;
-		drawView();
 	}
 	
 	private void drawView() {
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
-
-		if (currentLocation != null) {
-			GeoPoint point = 
-				new GeoPoint(
-			          (int) (currentLocation.getLatitude() * 1E6), 
-			          (int) (currentLocation.getLongitude() * 1E6));
-			
-			CurrentLocationOverlay currentLocationOverlay = new CurrentLocationOverlay();
-			currentLocationOverlay.setPointToDraw(point);
-			listOfOverlays.add(currentLocationOverlay);
-			
+		listOfOverlays.add(myLocationOverlay);
+		
+		if (currentLocation != null) {	
 			for (int i = 0; i < friendshipList.size(); i++) {
 				Friendship friendship = friendshipList.get(i);
 				FriendshipLocationOverlay friendshipLocationOverlay = new FriendshipLocationOverlay(friendship);
@@ -175,33 +179,6 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		
 	}
     
-	public class CurrentLocationOverlay extends Overlay {
-		
-		private GeoPoint pointToDraw;
-
-		public void setPointToDraw(GeoPoint point) {
-			pointToDraw = point;
-		}
-
-		public GeoPoint getPointToDraw() {
-			return pointToDraw;
-		}
-		  
-		@Override
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
-		    super.draw(canvas, mapView, shadow);           
-
-		    Point screenPts = new Point();
-		    mapView.getProjection().toPixels(pointToDraw, screenPts);
-
-		    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.current_location);
-		    canvas.drawBitmap(bmp, screenPts.x - (bmp.getWidth() / 2), screenPts.y - (bmp.getHeight() / 2), null);    
-		    
-		    return true;
-		}
-		
-	}
-	
 	public class FriendshipLocationOverlay extends Overlay {
 		
 		private GeoPoint pointToDraw;
@@ -249,15 +226,55 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 				return true;
 			}
 			
-		    Point screenPts = new Point();
-		    mapView.getProjection().toPixels(pointToDraw, screenPts);
-
-		    Bitmap bmp = BitmapFactory.decodeResource(getResources(), drawableId);
-		    canvas.drawBitmap(bmp, screenPts.x - (bmp.getWidth() / 2), screenPts.y - (bmp.getHeight() / 2), null);      	
+		    Point locationPts = new Point();
+		    mapView.getProjection().toPixels(pointToDraw, locationPts);
+		    
+		    
+		    Bitmap locationIcon = BitmapFactory.decodeResource(getResources(), drawableId);
+		    // TODO Avatar will be create from byte array 
+		    // byte[] avatarData = friendship.getAvatar();
+		    // Bitmap avatar = BitmapFactory.decodeByteArray(avatarData, 0, avatarData.length);
+		    Bitmap avatar = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
+		    avatar = Bitmap.createScaledBitmap(avatar, locationIcon.getWidth() / 2, locationIcon.getHeight() /  2, false);
+		    avatar = getOvalBitmap(avatar);
+		    
+		    canvas.drawBitmap(avatar, locationPts.x - (avatar.getWidth() / 2), locationPts.y - (avatar.getHeight() / 2), null);      	
+		    canvas.drawBitmap(locationIcon, locationPts.x - (locationIcon.getWidth() / 2), locationPts.y - (locationIcon.getHeight() / 2), null);      	
 		    
 		    return true;
 		}
 		
+		private Bitmap getOvalBitmap(Bitmap bitmap) {
+	        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+	        Canvas canvas = new Canvas(output);
+	        
+	        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+	        RectF rectF = new RectF(rect);
+	        Paint paint = new Paint();
+	        
+	        paint.setAntiAlias(true);
+	        
+	        canvas.drawARGB(0, 0, 0, 0);
+	        canvas.drawRoundRect(rectF, bitmap.getWidth() / 2, bitmap.getHeight() / 2, paint);
+	        
+	        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+	        
+	        canvas.drawBitmap(bitmap, rect, rect, paint);
+	        
+	        return output;
+	    }
+		
+		@SuppressWarnings("unused")
+		private void drawOvalBitmap(Canvas canvas, Bitmap bitmap, Point centerPoint) {
+			Paint paint = new Paint();
+			paint.setAntiAlias(true);
+			paint.setShader(new BitmapShader(bitmap, TileMode.CLAMP, TileMode.CLAMP));
+
+			float left = centerPoint.x - (bitmap.getWidth() / 2);
+			float top = centerPoint.y - (bitmap.getHeight() / 2);
+			RectF rect = new RectF(left, top, left + bitmap.getWidth(),  top + bitmap.getHeight());
+			canvas.drawRoundRect(rect, bitmap.getWidth() / 2, bitmap.getHeight() / 2, paint);
+		}
 	}
 	
 	public class HeaderOverlay extends Overlay {
@@ -297,17 +314,4 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		
 	}
 	
-	private void generateRandomFriendshipList() {
-    	friendshipList.clear();
-    	for (int i = 0; i < 5; i++) {
-    		// Latitude  : 39.865776
-    		// Longitude : 32.824917
-    		friendshipList.add(
-    				new Friendship(
-    						39.865776 + (0.0001 * Math.random() * 5), //0.0001 10m difference
-    						32.824917 + (0.0001 * Math.random() * 5), //0.0001 10m difference
-    						FriendshipType.values()[(int)(Math.random() * 3)]));
-    	}
-    }
-
 }
