@@ -31,11 +31,15 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class FriendshipMapActivity extends MapActivity implements LocationListener {
 
@@ -65,6 +69,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     private MapView mapView;
     private MapController mapController;
     private List<Friendship> friendshipList = new ArrayList<Friendship>();
+    private ImageView dragImage;
     
     private RingService ringService = RingServiceRestImpl.getRingService();
     
@@ -149,11 +154,10 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		if (currentLocation != null) {	
 			for (int i = 0; i < friendshipList.size(); i++) {
 				Friendship friendship = friendshipList.get(i);
-				FriendshipLocationOverlay friendshipLocationOverlay = new FriendshipLocationOverlay(friendship);
 				GeoPoint friendshipLocationPoint = new GeoPoint(
 				          (int) (friendship.getLatitude() * 1E6), 
 				          (int) (friendship.getLongitude() * 1E6));
-				friendshipLocationOverlay.setPointToDraw(friendshipLocationPoint);
+				FriendshipLocationOverlay friendshipLocationOverlay = new FriendshipLocationOverlay(friendship, friendshipLocationPoint);
 				listOfOverlays.add(friendshipLocationOverlay);
 			}
 		}
@@ -183,32 +187,18 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		
 		private GeoPoint pointToDraw;
 		private Friendship friendship;
+		private Point locationPts;
+		private Bitmap avatar;
+		private Bitmap locationIcon;
 		
-		public FriendshipLocationOverlay(Friendship friendship) {
+		public FriendshipLocationOverlay(Friendship friendship, GeoPoint point) {
 			this.friendship = friendship;
-		}
-
-		public void setPointToDraw(GeoPoint point) {
-			pointToDraw = point;
-		}
-
-		public GeoPoint getPointToDraw() {
-			return pointToDraw;
+			this.pointToDraw = point;
+			init();
 		}
 		
-		public Friendship getFriendship() {
-			return friendship;
-		}
-		
-		public void setFriendship(Friendship friendship) {
-			this.friendship = friendship;
-		}
-		  
-		@Override
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
-		    super.draw(canvas, mapView, shadow);           
-
-		    int drawableId = 0;
+		private void init() {
+			int drawableId = 0;
 			
 			switch (friendship.getFriendshipType()) {
 				case IN_RING:
@@ -223,21 +213,41 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			}
 			
 			if (drawableId == 0) {
-				return true;
+				return;
 			}
 			
-		    Point locationPts = new Point();
+		    locationPts = new Point();
 		    mapView.getProjection().toPixels(pointToDraw, locationPts);
-		    
-		    
-		    Bitmap locationIcon = BitmapFactory.decodeResource(getResources(), drawableId);
+
+		    locationIcon = BitmapFactory.decodeResource(getResources(), drawableId);
 		    // TODO Avatar will be create from byte array 
 		    // byte[] avatarData = friendship.getAvatar();
 		    // Bitmap avatar = BitmapFactory.decodeByteArray(avatarData, 0, avatarData.length);
-		    Bitmap avatar = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
+		    avatar = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
 		    avatar = Bitmap.createScaledBitmap(avatar, locationIcon.getWidth() / 2, locationIcon.getHeight() /  2, false);
-		    avatar = getOvalBitmap(avatar);
-		    
+		    avatar = getOvalBitmap(avatar);  	
+		}
+		
+		public GeoPoint getPointToDraw() {
+			return pointToDraw;
+		}
+		
+		public void setPointToDraw(GeoPoint point) {
+			pointToDraw = point;
+		}
+		
+		public Friendship getFriendship() {
+			return friendship;
+		}
+		
+		public void setFriendship(Friendship friendship) {
+			this.friendship = friendship;
+		}
+		  
+		@Override
+		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
+		    super.draw(canvas, mapView, shadow);           
+
 		    canvas.drawBitmap(avatar, locationPts.x - (avatar.getWidth() / 2), locationPts.y - (avatar.getHeight() / 2), null);      	
 		    canvas.drawBitmap(locationIcon, locationPts.x - (locationIcon.getWidth() / 2), locationPts.y - (locationIcon.getHeight() / 2), null);      	
 		    
@@ -275,6 +285,36 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			RectF rect = new RectF(left, top, left + bitmap.getWidth(),  top + bitmap.getHeight());
 			canvas.drawRoundRect(rect, bitmap.getWidth() / 2, bitmap.getHeight() / 2, paint);
 		}
+		
+		 @Override
+		 public boolean onTouchEvent(MotionEvent event, MapView mapView) {
+			 int action = event.getAction();
+			 int x = (int)event.getX();
+			 int y = (int)event.getY();
+			 
+			 if (action == MotionEvent.ACTION_DOWN) {
+				 if (dragImage != null) {
+					 mapView.removeView(dragImage);
+				 }
+				 dragImage = new ImageView(FriendshipMapActivity.this);
+				 dragImage.setBackgroundDrawable(new BitmapDrawable(avatar));
+				 dragImage.setLayoutParams(new RelativeLayout.LayoutParams(avatar.getWidth(), avatar.getHeight()));
+				 mapView.addView(dragImage);
+			 }
+			 setDragImagePosition(x, y);
+			 
+			 super.onTouchEvent(event, mapView);
+			 
+			 return true;
+		 }
+		    
+		 private void setDragImagePosition(int x, int y) {
+			 MapView.LayoutParams lp = (MapView.LayoutParams)dragImage.getLayoutParams();
+		     lp.x = x - dragImage.getWidth() / 2;
+		     lp.y = y - dragImage.getHeight() / 2;
+		     dragImage.setLayoutParams(lp);
+		 }
+		 
 	}
 	
 	public class HeaderOverlay extends Overlay {
