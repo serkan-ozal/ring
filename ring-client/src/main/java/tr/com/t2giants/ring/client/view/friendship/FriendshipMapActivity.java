@@ -39,7 +39,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 public class FriendshipMapActivity extends MapActivity implements LocationListener {
 
@@ -59,8 +58,12 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     private final static int FOOTER_ICON_WIDTH = 72;
     
     private final Paint HEADER_PAINT = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_PAINT_0a = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_PAINT_0b = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint FOOTER_PAINT_1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint FOOTER_PAINT_2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_TEXT_PAINT_1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint FOOTER_TEXT_PAINT_2 = new Paint(Paint.ANTI_ALIAS_FLAG);
     
     private LocationManager locationManager;
     private Location currentLocation;
@@ -69,7 +72,9 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     private MapView mapView;
     private MapController mapController;
     private List<Friendship> friendshipList = new ArrayList<Friendship>();
+    private List<FriendshipLocationOverlay> friendshipLocationOverlays = new ArrayList<FriendshipLocationOverlay>();
     private ImageView dragImage;
+    private boolean draggedFriendshipOnTarget = false;
     
     private RingService ringService = RingServiceRestImpl.getRingService();
     
@@ -81,11 +86,28 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     	HEADER_PAINT.setColor(0xFFFA3857);
     	HEADER_PAINT.setStyle(Style.FILL);
     	
+    	FOOTER_PAINT_0a.setColor(0xFFFFFFFF);
+    	FOOTER_PAINT_0a.setStyle(Style.FILL);
+    	
+    	FOOTER_PAINT_0b.setColor(0xFFFA3857);
+    	FOOTER_PAINT_0b.setStyle(Style.STROKE);
+    	FOOTER_PAINT_0b.setStrokeWidth(10);
+    	
     	FOOTER_PAINT_1.setColor(0xFFFA3857);
     	FOOTER_PAINT_1.setStyle(Style.FILL);
     	
     	FOOTER_PAINT_2.setColor(0xFFCD2943);
     	FOOTER_PAINT_2.setStyle(Style.FILL);
+    	
+    	FOOTER_TEXT_PAINT_1.setColor(0xFFFFFFFF);
+    	FOOTER_TEXT_PAINT_1.setStyle(Style.STROKE);
+    	FOOTER_TEXT_PAINT_1.setStrokeWidth(2);
+    	FOOTER_TEXT_PAINT_1.setTextSize(25);
+    	
+    	FOOTER_TEXT_PAINT_2.setColor(0xFFFA3857);
+    	FOOTER_TEXT_PAINT_2.setStyle(Style.STROKE);
+    	FOOTER_TEXT_PAINT_2.setStrokeWidth(2);
+    	FOOTER_TEXT_PAINT_2.setTextSize(25);
     }
     
     @Override
@@ -149,6 +171,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 	private void drawView() {
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
+		friendshipLocationOverlays.clear();
 		listOfOverlays.add(myLocationOverlay);
 		
 		if (currentLocation != null) {	
@@ -159,6 +182,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 				          (int) (friendship.getLongitude() * 1E6));
 				FriendshipLocationOverlay friendshipLocationOverlay = new FriendshipLocationOverlay(friendship, friendshipLocationPoint);
 				listOfOverlays.add(friendshipLocationOverlay);
+				friendshipLocationOverlays.add(friendshipLocationOverlay);
 			}
 		}
 		
@@ -243,6 +267,22 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 		public void setFriendship(Friendship friendship) {
 			this.friendship = friendship;
 		}
+		
+		public Point getLocationPts() {
+			return locationPts;
+		}
+		
+		public int getWidth() {
+			return locationIcon.getWidth();
+		}
+		
+		public int getHeight() {
+			return locationIcon.getHeight();
+		}
+		
+		public Bitmap getAvatar() {
+			return avatar;
+		}
 		  
 		@Override
 		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
@@ -292,27 +332,76 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			 int x = (int)event.getX();
 			 int y = (int)event.getY();
 			 
+			 Log.i(TAG, x + ", " + y);
+
+			 if (action == MotionEvent.ACTION_UP) {
+				 if (dragImage != null) {
+					 mapView.removeView(dragImage);
+				 }
+				 dragImage = null;
+				 draggedFriendshipOnTarget = false;
+				 return true;
+			 }
+			 
 			 if (action == MotionEvent.ACTION_DOWN) {
 				 if (dragImage != null) {
 					 mapView.removeView(dragImage);
 				 }
-				 dragImage = new ImageView(FriendshipMapActivity.this);
-				 dragImage.setBackgroundDrawable(new BitmapDrawable(avatar));
-				 dragImage.setLayoutParams(new RelativeLayout.LayoutParams(avatar.getWidth(), avatar.getHeight()));
-				 mapView.addView(dragImage);
+				 FriendshipLocationOverlay selectedOverlay = findClickedFriendshipIfExist(x, y);
+				 if (selectedOverlay != null) {
+					 dragImage = new ImageView(FriendshipMapActivity.this);
+					 Bitmap selectedAvatar = selectedOverlay.getAvatar();
+					 dragImage.setBackgroundDrawable(new BitmapDrawable(selectedAvatar));
+					 MapView.LayoutParams lp = 
+							 new MapView.LayoutParams(
+									 selectedAvatar.getWidth(), selectedAvatar.getHeight(),
+									 x - dragImage.getWidth() / 2, y - dragImage.getHeight() / 2,
+									 MapView.LayoutParams.CENTER);
+					 dragImage.setLayoutParams(lp);
+					 mapView.addView(dragImage);
+				 }
 			 }
 			 setDragImagePosition(x, y);
 			 
 			 super.onTouchEvent(event, mapView);
 			 
+			 boolean lastDraggedFriendshipOnTarget = draggedFriendshipOnTarget;
+			 
+			 if (y > (mapView.getHeight() - FOOTER_ICON_HEIGHT - 20 - 40)) {
+				 draggedFriendshipOnTarget = true;
+			 }
+			 else {
+				 draggedFriendshipOnTarget = false;
+			 }
+			 
+			 if (lastDraggedFriendshipOnTarget != draggedFriendshipOnTarget) {
+				 mapView.invalidate();
+			 } 
+			 
 			 return true;
 		 }
 		    
 		 private void setDragImagePosition(int x, int y) {
-			 MapView.LayoutParams lp = (MapView.LayoutParams)dragImage.getLayoutParams();
-		     lp.x = x - dragImage.getWidth() / 2;
-		     lp.y = y - dragImage.getHeight() / 2;
-		     dragImage.setLayoutParams(lp);
+			 if (dragImage != null) {
+				 MapView.LayoutParams lp = (MapView.LayoutParams)dragImage.getLayoutParams();
+			     lp.x = x;
+			     lp.y = y;
+			     dragImage.setLayoutParams(lp);
+			 }    
+		 }
+		 
+		 private FriendshipLocationOverlay findClickedFriendshipIfExist(int x, int y) {
+			 for (FriendshipLocationOverlay overlay : friendshipLocationOverlays) {
+				 Point locationPts = overlay.getLocationPts();
+				 int radius = Math.min(overlay.getWidth(), overlay.getHeight());
+				 int xDiff = Math.abs(x - locationPts.x);
+				 int yDiff = Math.abs(y - locationPts.y);
+				 int diffToCenter = (int)Math.sqrt(((xDiff * xDiff) + (yDiff * yDiff)));
+				 if (diffToCenter < radius) {
+					 return overlay;
+				 }
+			 }
+			 return null;
 		 }
 		 
 	}
@@ -338,7 +427,16 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 						mapView.getHeight() - FOOTER_ICON_HEIGHT - 20 - 40, 
 						+500 + (mapView.getWidth() / 2), 
 						mapView.getHeight() - FOOTER_ICON_HEIGHT + 1000 - 40);
-			canvas.drawArc(oval1, 0, 360, true, FOOTER_PAINT_1);
+			String friendCount = friendshipList != null ? String.valueOf(friendshipList.size()) : "0";
+			if (draggedFriendshipOnTarget) {
+				canvas.drawArc(oval1, 0, 360, true, FOOTER_PAINT_0a);
+				canvas.drawArc(oval1, 0, 360, true, FOOTER_PAINT_0b);
+				canvas.drawText(friendCount, mapView.getWidth() / 2, mapView.getHeight() - FOOTER_ICON_HEIGHT - 20 - 10, FOOTER_TEXT_PAINT_2);
+			}
+			else {
+				canvas.drawArc(oval1, 0, 360, true, FOOTER_PAINT_1);
+				canvas.drawText(friendCount, mapView.getWidth() / 2, mapView.getHeight() - FOOTER_ICON_HEIGHT - 20 - 10, FOOTER_TEXT_PAINT_1);
+			}
 			
 			RectF oval2 = new RectF();
 			oval2.set(	-500 + (mapView.getWidth() / 2), 
