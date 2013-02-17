@@ -10,5 +10,9 @@ public interface RingService {
 
 	public LoginResponse login(LoginRequest loginRequest);
 	public List<Friendship> getFriendships();
+	public void informCurrentLocation(double lat, double lon);
+	public void sendRequestForAddingToRing(long id);
+	public void sendRequestForRemovingFromRing(long id);
+	public void sendRequestForDiscardingRingRequest(long id);
 	
 }

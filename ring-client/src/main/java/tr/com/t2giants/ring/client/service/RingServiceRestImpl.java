@@ -55,24 +55,47 @@ public class RingServiceRestImpl implements RingService, RestConstants {
 			return new LoginResponse(new LoginFailedException(t));
 		}
 	}
-	
-	public static void main(String[] args) {
-		RingService ringService = new RingServiceRestImpl();
-		LoginResponse loginResponse = ringService.login(new LoginRequest("abc", "admin"));
-		System.out.println(loginResponse.getToken());
-	}
 
 	@Override
 	public List<Friendship> getFriendships() {
 		List<Friendship> friendshipList = new ArrayList<Friendship>();
 		for (int i = 0; i < 5; i++) {
 			friendshipList.add(
-				new Friendship(
+				new Friendship(i,
 						39.865776 + (0.0001 * Math.random() * 5), //0.0001 10m difference
 						32.824917 + (0.0001 * Math.random() * 5), //0.0001 10m difference
 						FriendshipType.values()[(int)(Math.random() * 3)]));
 		}
 		return friendshipList;
+	}
+
+	@Override
+	public void informCurrentLocation(double lat, double lon) {
+		try {
+			HttpClient client = new DefaultHttpClient();
+			HttpPost request = new HttpPost(SERVER_URL + INFORM_LOCATION_PATH + URL_SEPARATOR + lat + URL_SEPARATOR + lon);
+			request.addHeader(TOKEN_PARAMETER, authenticationToken);
+			HttpResponse response = client.execute(request);
+			System.out.println(response.getStatusLine().getStatusCode());
+		}
+		catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	@Override
+	public void sendRequestForAddingToRing(long id) {
+		
+	}
+
+	@Override
+	public void sendRequestForRemovingFromRing(long id) {
+		
+	}
+
+	@Override
+	public void sendRequestForDiscardingRingRequest(long id) {
+		
 	}
 
 }
