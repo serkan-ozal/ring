@@ -29,7 +29,7 @@ public class RingServiceImpl extends BaseService implements RingService {
         return responseOK();
     }
 
-    @RequestMapping(value = "/accept/{id}",
+    @RequestMapping(value = "/request/accept/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
     public Response acceptRequest(long id) {
@@ -37,7 +37,7 @@ public class RingServiceImpl extends BaseService implements RingService {
         return responseOK();
     }
 
-    @RequestMapping(value = "/discard/{id}",
+    @RequestMapping(value = "/request/discard/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
     public Response discardRequest(long id) {
@@ -45,7 +45,7 @@ public class RingServiceImpl extends BaseService implements RingService {
         return responseOK();
     }
 
-    @RequestMapping(value = "/destroy/{id}",
+    @RequestMapping(value = "/friends/destroy/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
     public Response removeFromRing(@PathVariable("id") long id) {
@@ -53,7 +53,7 @@ public class RingServiceImpl extends BaseService implements RingService {
         return responseOK();
     }
 
-    @RequestMapping(value = "/get/{id}",
+    @RequestMapping(value = "/friends/get/{id}",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON)
     public List<User> getRingOfUser(@PathVariable("id") long id) {

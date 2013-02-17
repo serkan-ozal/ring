@@ -1,6 +1,5 @@
 package tr.com.t2giants.ring.server.dao.mongo;
 
-import tr.com.t2giants.ring.core.domain.RingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -45,7 +44,8 @@ public class MongoUtilityImpl implements MongoUtility {
 
     @Override
     public RingUserLastPosition getLastPosition(long id) {
-        return mongoTemplate.findOne(query(where("id").is(id)), RingUserLastPosition.class);
+        final RingUserLastPosition lp = mongoTemplate.findOne(query(where("userID").is(id)), RingUserLastPosition.class);
+        return lp;
     }
 
     @Override

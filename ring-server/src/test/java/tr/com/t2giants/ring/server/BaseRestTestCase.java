@@ -77,7 +77,7 @@ public class BaseRestTestCase extends BaseTestCase {
     }
 
     protected String getAuthTokenUser() {
-        return getAuthToken("abc", "admin");
+        return getAuthToken("soner", "admin");
     }
 
     protected String getAuthToken(String username, String password) {
