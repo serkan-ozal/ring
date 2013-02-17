@@ -67,14 +67,36 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+     	<profile>
+       		<id>jetty</id>
+       		<dependencies>
+	       		<dependency>
+		            <groupId>tr.com.t2giants</groupId>
+		            <artifactId>ring-core</artifactId>
+		            <version>${app.version}</version>
+	       			<scope>system</scope>
+	            	<systemPath>${basedir}/../ring-core/target/ring-core-${app.version}.jar</systemPath>
+	            </dependency>	
+	        </dependencies>       
+       	</profile>
+       	<profile>
+       		<id>default</id>
+       		<dependencies>
+				<dependency>
+		            <groupId>tr.com.t2giants</groupId>
+		            <artifactId>ring-core</artifactId>
+		            <version>${app.version}</version>
+		        </dependency>
+		    </dependencies>    
+			<activation>
+		      	<activeByDefault>true</activeByDefault>
+		    </activation>
+       	</profile>
+    </profiles>   	
 
     <dependencies>
-        <dependency>
-            <groupId>tr.com.t2giants</groupId>
-            <artifactId>ring-core</artifactId>
-            <version>${app.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
