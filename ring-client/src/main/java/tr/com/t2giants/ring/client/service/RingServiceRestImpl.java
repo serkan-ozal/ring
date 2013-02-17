@@ -8,8 +8,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 
 import tr.com.t2giants.ring.client.exception.InvalidUsernameOrPasswordException;
 import tr.com.t2giants.ring.client.exception.LoginFailedException;
@@ -75,14 +73,8 @@ public class RingServiceRestImpl implements RingService, RestConstants {
 	public void informCurrentLocation(double lat, double lon) {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			System.out.println(SERVER_URL + INFORM_LOCATION_PATH + URL_SEPARATOR + lat + URL_SEPARATOR + lon);
-			HttpPost request = new HttpPost(SERVER_URL + INFORM_LOCATION_PATH + URL_SEPARATOR + "11" + URL_SEPARATOR + "12");
-			//request.addHeader(REMEMBER_ME_PARAMETER, Boolean.TRUE.toString());
+			HttpPost request = new HttpPost(SERVER_URL + INFORM_LOCATION_PATH + URL_SEPARATOR + lat + URL_SEPARATOR + lon);
 			request.addHeader(TOKEN_PARAMETER, authenticationToken);
-			HttpParams params = new BasicHttpParams();
-			params.setDoubleParameter("lat", lat);
-			params.setDoubleParameter("lon", lon);
-			//request.setParams(params);
 			HttpResponse response = client.execute(request);
 			System.out.println(response.getStatusLine().getStatusCode());
 		}
