@@ -43,7 +43,7 @@ public class FriendshipRadarActivity extends BaseRingActivity {
     		// Latitude  : 37,422006
     		// Longitude : -122,084095
     		friendshipList.add(
-    				new Friendship(
+    				new Friendship(i,
     						37.4220 + (0.0001 * Math.random() * 5), //0.0001 10m difference
     						-122.0840 + (0.0001 * Math.random() * 5), //0.0001 10m difference
     						FriendshipType.values()[(int)(Math.random() * 3)]));

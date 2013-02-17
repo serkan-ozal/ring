@@ -2,6 +2,7 @@ package tr.com.t2giants.ring.client.model;
 
 public class Friendship {
 
+	private long id;
 	private double latitude;
 	private double longitude;
 	private FriendshipType friendshipType;
@@ -11,17 +12,27 @@ public class Friendship {
 		
 	}
 	
-	public Friendship(double latitude, double longitude, FriendshipType friendshipType) {
+	public Friendship(long id, double latitude, double longitude, FriendshipType friendshipType) {
+		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.friendshipType = friendshipType;
 	}
 	
-	public Friendship(double latitude, double longitude, FriendshipType friendshipType, byte[] avatar) {
+	public Friendship(long id, double latitude, double longitude, FriendshipType friendshipType, byte[] avatar) {
+		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.friendshipType = friendshipType;
 		this.avatar = avatar;
+	}
+	
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	public double getLatitude() {

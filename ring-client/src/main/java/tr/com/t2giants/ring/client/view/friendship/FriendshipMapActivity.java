@@ -16,8 +16,10 @@ import tr.com.t2giants.ring.client.model.Friendship;
 import tr.com.t2giants.ring.client.service.RingService;
 import tr.com.t2giants.ring.client.service.RingServiceRestImpl;
 import tr.com.t2giants.ring.client.view.R;
+import tr.com.t2giants.ring.client.view.util.RingClientUtil;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -73,15 +75,12 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
     private MapController mapController;
     private List<Friendship> friendshipList = new ArrayList<Friendship>();
     private List<FriendshipLocationOverlay> friendshipLocationOverlays = new ArrayList<FriendshipLocationOverlay>();
+    private Friendship selectedFriendship;
     private ImageView dragImage;
     private boolean draggedFriendshipOnTarget = false;
     
     private RingService ringService = RingServiceRestImpl.getRingService();
-    
-    public FriendshipMapActivity() {
-    	init();
-    }
-    
+
     private void init() {
     	HEADER_PAINT.setColor(0xFFFA3857);
     	HEADER_PAINT.setStyle(Style.FILL);
@@ -115,6 +114,8 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
 		
+		init();
+		
 		setContentView(R.layout.friendship);
 
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -133,13 +134,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			schedule(
 				new TimerTask() {
 		            public void run() {
-		            	FriendshipMapActivity.this.runOnUiThread(
-		            		new Runnable() {
-								@Override
-								public void run() {
-									refreshView();
-								}
-		            		});
+		            	processCurrentCycle();
 		            }
 				}, 
 				REFRESH_INITIAL_DELAY_TIME, REFRESH_PERIOD_IN_MSEC);
@@ -148,6 +143,20 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	private void processCurrentCycle() {
+		if (currentLocation != null) {
+			ringService.informCurrentLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
+		}
+		FriendshipMapActivity.this.
+			runOnUiThread(
+        		new Runnable() {
+					@Override
+					public void run() {
+						refreshView();
+					}
+        		});
 	}
 	
 	private void refreshView() {
@@ -205,6 +214,102 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		
+	}
+	
+	private void handleConfirmation() {
+		if (selectedFriendship != null) {
+			switch (selectedFriendship.getFriendshipType()) {
+				case IN_RING:
+					confirmForRemovingFromRing();
+					break;
+				case OUT_RING:
+					confirmForAddingToRing();
+					break;
+				case RING_REQUESTED:
+					confirmForCancellingRequest();
+					break;	
+			}
+		}
+		else {
+			unsetFriendshipSelection();
+		}
+	}
+	
+	private void confirmForAddingToRing() {
+		RingClientUtil.showConfirmDialog(
+				FriendshipMapActivity.this, "Confirmation", "Do you want to add this user to your ring?", 
+				new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	ringService.sendRequestForAddingToRing(selectedFriendship.getId());
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    }, 
+			    new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    });
+	}
+	
+	private void confirmForRemovingFromRing() {
+		RingClientUtil.showConfirmDialog(
+				FriendshipMapActivity.this, "Confirmation", "Do you want to remove this user from your ring?", 
+				new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	ringService.sendRequestForRemovingFromRing(selectedFriendship.getId());
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    }, 
+			    new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    });
+	}
+	
+	private void confirmForCancellingRequest() {
+		RingClientUtil.showConfirmDialog(
+				FriendshipMapActivity.this, "Confirmation", "Do you want to cancel friendship request for this user?", 
+				new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	ringService.sendRequestForDiscardingRingRequest(selectedFriendship.getId());
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    }, 
+			    new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int buttonId) {
+			        	unsetFriendshipSelection();
+			        	dialog.cancel(); 
+			        }
+			    });
+	}
+	
+	private void setFriendshipSelection(FriendshipLocationOverlay selectedOverlay, int x, int y) {
+		selectedFriendship = selectedOverlay.friendship;
+		dragImage = new ImageView(FriendshipMapActivity.this);
+		Bitmap selectedAvatar = selectedOverlay.getAvatar();
+		dragImage.setBackgroundDrawable(new BitmapDrawable(selectedAvatar));
+		MapView.LayoutParams lp = 
+				 new MapView.LayoutParams(
+						 selectedAvatar.getWidth(), selectedAvatar.getHeight(),
+						 x - dragImage.getWidth() / 2, y - dragImage.getHeight() / 2,
+						 MapView.LayoutParams.CENTER);
+		dragImage.setLayoutParams(lp);
+		mapView.addView(dragImage);
+	}
+	
+	private void unsetFriendshipSelection() {
+		if (dragImage != null) {
+			 mapView.removeView(dragImage);
+		}
+		selectedFriendship = null;
+		dragImage = null;
+		draggedFriendshipOnTarget = false;
 	}
     
 	public class FriendshipLocationOverlay extends Overlay {
@@ -331,15 +436,14 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			 int action = event.getAction();
 			 int x = (int)event.getX();
 			 int y = (int)event.getY();
-			 
-			 Log.i(TAG, x + ", " + y);
 
 			 if (action == MotionEvent.ACTION_UP) {
-				 if (dragImage != null) {
-					 mapView.removeView(dragImage);
+				 if (draggedFriendshipOnTarget) {
+					 handleConfirmation();
 				 }
-				 dragImage = null;
-				 draggedFriendshipOnTarget = false;
+				 else {
+					unsetFriendshipSelection();
+				 } 
 				 return true;
 			 }
 			 
@@ -349,18 +453,10 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 				 }
 				 FriendshipLocationOverlay selectedOverlay = findClickedFriendshipIfExist(x, y);
 				 if (selectedOverlay != null) {
-					 dragImage = new ImageView(FriendshipMapActivity.this);
-					 Bitmap selectedAvatar = selectedOverlay.getAvatar();
-					 dragImage.setBackgroundDrawable(new BitmapDrawable(selectedAvatar));
-					 MapView.LayoutParams lp = 
-							 new MapView.LayoutParams(
-									 selectedAvatar.getWidth(), selectedAvatar.getHeight(),
-									 x - dragImage.getWidth() / 2, y - dragImage.getHeight() / 2,
-									 MapView.LayoutParams.CENTER);
-					 dragImage.setLayoutParams(lp);
-					 mapView.addView(dragImage);
+					 setFriendshipSelection(selectedOverlay, x, y);
 				 }
 			 }
+			 
 			 setDragImagePosition(x, y);
 			 
 			 super.onTouchEvent(event, mapView);
@@ -377,7 +473,7 @@ public class FriendshipMapActivity extends MapActivity implements LocationListen
 			 if (lastDraggedFriendshipOnTarget != draggedFriendshipOnTarget) {
 				 mapView.invalidate();
 			 } 
-			 
+
 			 return true;
 		 }
 		    
