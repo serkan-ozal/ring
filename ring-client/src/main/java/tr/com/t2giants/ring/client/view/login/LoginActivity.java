@@ -4,18 +4,18 @@ import tr.com.t2giants.ring.client.model.LoginRequest;
 import tr.com.t2giants.ring.client.model.LoginResponse;
 import tr.com.t2giants.ring.client.view.BaseRingActivity;
 import tr.com.t2giants.ring.client.view.R;
+import tr.com.t2giants.ring.client.view.friendship.FriendshipMapActivity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LoginActivity extends BaseRingActivity {
-
-    private static String TAG = "ring-login";
 
     private TextView txtUsername;
     private TextView txtPassword;
@@ -25,7 +25,10 @@ public class LoginActivity extends BaseRingActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
+		
+        Log.i(TAG, "onCreate");
+		
+        setTitle("Login");
         setContentView(R.layout.login);
         
         txtUsername = (TextView)findViewById(R.id.txtUsername);
@@ -60,27 +63,53 @@ public class LoginActivity extends BaseRingActivity {
     	CharSequence usernameValue = txtUsername.getText();
     	CharSequence passwordValue = txtPassword.getText();
     	
-    	if (usernameValue == null || passwordValue == null) {
-    		Toast.makeText(getApplicationContext(), "Username and Password cannot be empty !", 
-    				Toast.LENGTH_SHORT).show();
-    		return;
+    	boolean inputValid = true;
+    	
+    	if (usernameValue == null) {
+    		txtUsername.setError("Username cannot be empty !");
+    		inputValid = false;
     	}
     	
+    	if (passwordValue == null) {
+    		txtPassword.setError("Password cannot be empty !");
+    		inputValid = false;
+    	}
+    	
+    	if (inputValid == false) {
+    		return;
+    	}
+
     	String username = txtUsername.getText().toString();
     	String password = txtPassword.getText().toString();
     	
-    	if (username == null || password == null || username.length() == 0 || password.length() == 0) {
-    		Toast.makeText(getApplicationContext(), "Username and Password cannot be empty !", 
-    				Toast.LENGTH_SHORT).show();
+    	if (username == null || username.length() == 0) {
+    		txtUsername.setError("Username cannot be empty !");
+    		inputValid = false;
+    	}
+    	
+    	if (password == null || password.length() == 0) {
+    		txtPassword.setError("Password cannot be empty !");
+    		inputValid = false;
+    	}
+    	
+    	if (inputValid == false) {
     		return;
     	}
     	
     	LoginResponse response = ringService.login(new LoginRequest(username, password));
     	if (response.isSuccessful()) {
-    		Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+    		// TODO After login, user may be redirected to another activity
+            startActivity(new Intent(this, FriendshipMapActivity.class));
     	}
     	else {
-    		Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+    		AlertDialog ad = 
+    				new AlertDialog.Builder(LoginActivity.this).
+    						setIcon(R.drawable.login_failed_32x32).
+    						setCancelable(false). 
+    						setMessage(response.getError().getMessage()).
+    					create();   
+    		ad.setCanceledOnTouchOutside(true);
+    		ad.show();  
     	}
     }
     

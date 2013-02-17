@@ -46,7 +46,8 @@
 		        android:layout_width="8dip"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:text=""/>
+		        android:text=""
+		        android:inputType="textPassword"/>
         </TableRow>
         <TableRow  
             android:layout_width="match_parent"

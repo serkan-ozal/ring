@@ -26,6 +26,12 @@
             <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.android.addon</groupId>
+            <artifactId>maps</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
          <dependency>
             <groupId>tr.com.t2giants</groupId>
             <artifactId>ring-core</artifactId>
