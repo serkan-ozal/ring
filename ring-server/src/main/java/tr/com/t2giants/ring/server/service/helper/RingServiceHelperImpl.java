@@ -73,16 +73,16 @@ public class RingServiceHelperImpl implements RingServiceHelper {
     }
 
     @Override
-    public List<User> getRingOfUser(long loggedInUserID) {
-        userServiceHelper.checkUser(loggedInUserID);
-        final List<Long> ringOfUser = ringDao.getRingOfUser(loggedInUserID);
+    public List<User> getRingOfUser(long id) {
+        userServiceHelper.checkUser(id);
+        final List<Long> ringOfUser = ringDao.getRingOfUser(id);
         if (ringOfUser == null) {
             return null;
         }
 
         List<User> ringList = new ArrayList<User>();
-        for (long id : ringOfUser) {
-            ringList.add(userServiceHelper.checkUser(id));
+        for (long listID : ringOfUser) {
+            ringList.add(userServiceHelper.checkUser(listID));
         }
         return ringList;
     }

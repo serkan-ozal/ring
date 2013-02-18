@@ -7,6 +7,7 @@ import tr.com.t2giants.ring.server.BaseRestTestCase;
 import java.io.File;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 /**
  * User: sonic
@@ -38,6 +39,19 @@ public class UserServiceTest extends BaseRestTestCase {
 //                body(ENTITY, is(ErrorMessages.USERNAME_MAX_CHAR_EXCEEDED.getErrorMessage())).
 //
 //                when().post(BASE_JETTY_API_URL + "/users/add");
+    }
+
+    @Test
+    public void getUser() {
+        final String token = getAuthTokenUser();
+
+        final String s = given().header(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY, token).
+                expect().statusCode(OK).
+
+                body(STATUS, is(OK)).
+
+                when().get(BASE_JETTY_API_URL + "/users/get/by-id/4").asString();
+        System.out.println(s);
     }
 
 }

@@ -15,12 +15,12 @@
     </appender>
 
     <logger name="tr.com.t2giants.ring.server">
-        <level value="INFO" />
+        <level value="DEBUG" />
         <appender-ref ref="STDOUT"/>
     </logger>
 
     <root>
-        <priority value="INFO" />
+        <priority value="DEBUG" />
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
